@@ -22,7 +22,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/admin/stats', { headers: { Authorization: `Bearer ${token()}` } })
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/stats`, { headers: { Authorization: `Bearer ${token()}` } })
       .then(r => r.json()).then(setStats).catch(console.error).finally(() => setLoading(false));
   }, []);
 

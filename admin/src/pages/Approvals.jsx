@@ -18,7 +18,7 @@ const Approvals = () => {
   const fetchPending = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch('/api/admin/pending', { headers: { Authorization: `Bearer ${token()}` } });
+      const res = await fetch(`${API_BASE}/api/admin/pending`, { headers: { Authorization: `Bearer ${token()}` } });
       const data = await res.json();
       setListings(data.listings || []);
     } catch { /* ignore */ } finally { setLoading(false); }

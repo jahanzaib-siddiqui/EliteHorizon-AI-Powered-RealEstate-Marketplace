@@ -9,7 +9,7 @@ const Properties = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch('/api/admin/properties', { headers: { Authorization: `Bearer ${token()}` } })
+    fetch(`${import.meta.env.VITE_API_URL}/api/admin/properties`, { headers: { Authorization: `Bearer ${token()}` } })
       .then(r => r.json()).then(setData).finally(() => setLoading(false));
   }, []);
 

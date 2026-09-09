@@ -11,7 +11,7 @@ const AdminLayout = () => {
   useEffect(() => {
     const fetchPending = async () => {
       try {
-        const res = await fetch('/api/admin/pending', {
+        const res = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/pending`, {
           headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
         });
         const data = await res.json();

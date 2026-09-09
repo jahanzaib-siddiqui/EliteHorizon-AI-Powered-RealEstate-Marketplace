@@ -24,7 +24,7 @@ const AdminChats = () => {
 
   const fetchChats = async () => {
     try {
-      const res = await fetch('/api/admin/chats?limit=50', {
+      const res = await fetch(`${API}/api/admin/chats?limit=50`, {
         headers: { Authorization: `Bearer ${localStorage.getItem('adminToken')}` }
       });
       const data = await res.json();
@@ -156,7 +156,7 @@ const AdminChats = () => {
               <div className="chat-viewer-info">
                   <h3>
                      <a 
-                        href={`http://localhost:5173/properties/${selectedChat.propertyId?._id}`} 
+                        href={`https://elite-horizon-ai-powered-real-estat-woad.vercel.app/properties/${selectedChat.propertyId?._id}`} 
                         target="_blank" 
                         rel="noreferrer"
                         className="viewer-property-link"
