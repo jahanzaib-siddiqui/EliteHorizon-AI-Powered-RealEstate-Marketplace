@@ -1,7 +1,6 @@
 import express from "express";
 import multer from "multer";
 import { v2 as cloudinary } from "cloudinary";
-import { CloudinaryStorage } from "multer-storage-cloudinary";
 import SellerProperty from "../models/SellerProperty.js";
 
 const router = express.Router();
@@ -13,24 +12,29 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// ── Cloudinary storage (replaces local disk storage) ─────────────────────────
-const storage = new CloudinaryStorage({
-    cloudinary,
-    params: {
-        folder:          "elite-horizon/properties",
-        allowed_formats: ["jpg", "jpeg", "png", "webp"],
-        transformation:  [{ width: 1200, quality: "auto" }],
-    },
-});
-
+// ── Multer memory storage (no disk, no multer-storage-cloudinary needed) ──────
 const upload = multer({
-    storage,
+    storage: multer.memoryStorage(),
     limits: { fileSize: 10 * 1024 * 1024 },
     fileFilter: (req, file, cb) => {
         if (!file.mimetype.startsWith("image/")) return cb(new Error("Only images allowed"), false);
         cb(null, true);
     },
 });
+
+// ── Helper: upload a single buffer to Cloudinary ─────────────────────────────
+function uploadToCloudinary(buffer, mimetype) {
+    return new Promise((resolve, reject) => {
+        const stream = cloudinary.uploader.upload_stream(
+            { folder: "elite-horizon/properties", resource_type: "image" },
+            (error, result) => {
+                if (error) reject(error);
+                else resolve(result.secure_url);
+            }
+        );
+        stream.end(buffer);
+    });
+}
 
 
 // ── GET /api/seller/listings/featured  (top 8 approved — public)
@@ -94,7 +98,9 @@ router.post("/list", upload.array("images", 14), async (req, res) => {
             });
         }
 
-        const imagePaths = (req.files || []).map(f => f.path); // Cloudinary returns full URL in f.path
+        const imagePaths = await Promise.all(
+            (req.files || []).map(f => uploadToCloudinary(f.buffer, f.mimetype))
+        );
 
         // amenities may be a single string or an array
         const rawAmenities = b.amenities;
