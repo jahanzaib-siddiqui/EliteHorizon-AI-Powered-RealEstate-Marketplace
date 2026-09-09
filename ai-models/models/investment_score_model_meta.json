@@ -1,0 +1,20 @@
+{
+  "model_name": "investment_score_model",
+  "algorithm": "Random Forest",
+  "features": [
+    "area_sqft",
+    "bedrooms",
+    "bathrooms",
+    "city_encoded",
+    "location_score",
+    "price_per_sqft",
+    "demand_score",
+    "latitude",
+    "longitude"
+  ],
+  "mae": 0.3743992949651946,
+  "r2": 0.9313171570977117,
+  "train_samples": 5605,
+  "test_samples": 1402,
+  "formula": "IS = 0.4*RF + 0.35*Loc + 0.15*Demand + 0.10*Yield  (clamped 0-100)"
+}

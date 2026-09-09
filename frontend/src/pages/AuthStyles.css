@@ -1,0 +1,227 @@
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f6f5f7;
+    background-image: url('/green_bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    font-family: 'Open Sans', sans-serif;
+    margin: -15px -40px;
+    /* Counteract Navbar padding if rendered without header layout */
+}
+
+.auth-box {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
+    position: relative;
+    overflow: hidden;
+    width: 768px;
+    max-width: 100%;
+    min-height: 480px;
+    display: flex;
+}
+
+.auth-panel {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 0 40px;
+    box-sizing: border-box;
+}
+
+/* Updated to Green Theme with Half-Height Structure from Image */
+.auth-overlay-content {
+    background: linear-gradient(to right, #28a745, #1e7e34);
+    /* Green theme */
+    color: #ffffff;
+    width: 100%;
+
+    /* Make the green box take up only a portion of the panel, aligned to the top */
+    height: 50%;
+    /* Adjusted height to look liket the images */
+    min-height: 500px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 0 40px;
+    box-sizing: border-box;
+    text-align: center;
+
+    /* Slight rounding on the edges if desired, but sticking to crisp lines as depicted */
+}
+
+/* Added specific alignments for the panel wrapping the overlay */
+.auth-panel-side {
+    justify-content: flex-start;
+    /* Align content to the top so the green hits the top border */
+    padding: 0;
+    /* Remove horizontal padding so the background is flush with borders */
+}
+
+/* Forms */
+.auth-form-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    padding: 40px 0;
+}
+
+.auth-form-container h2 {
+    font-weight: bold;
+    margin: 0;
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    margin-top: 15px;
+}
+
+.scrollable-form {
+    max-height: 250px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.scrollable-form::-webkit-scrollbar {
+    width: 5px;
+}
+
+.scrollable-form::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 5px;
+}
+
+.auth-form input {
+    background-color: #eee;
+    border: none;
+    padding: 12px 15px;
+    margin: 8px 0;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.social-cont.auth-card h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.role-selection {
+  margin: 15px 0;
+  text-align: left;
+}
+
+.role-selection label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #555;
+}
+
+.role-options {
+  display: flex;
+  gap: 15px;
+}
+
+.role-option {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.role-option input {
+  display: none;
+}
+
+.role-option.active {
+  border-color: green;
+  background-color: #f0fff0;
+  color: green;
+}
+
+.social-container {
+    margin: 20px 0;
+}
+
+.social-container a {
+    border: 1px solid #ddd;
+    border-radius: 50%;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 5px;
+    height: 40px;
+    width: 40px;
+    color: #333;
+    text-decoration: none;
+}
+
+.auth-form-container span {
+    font-size: 12px;
+    color: #777;
+}
+
+.forgot-password {
+    color: #333;
+    font-size: 14px;
+    text-decoration: none;
+    margin: 15px 0;
+}
+
+/* Buttons — scoped to auth pages only */
+.auth-container button {
+    border-radius: 20px;
+    border: 1px solid #28a745;
+    background-color: #28a745;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;
+    cursor: pointer;
+    margin-top: 15px;
+}
+
+.auth-container button:active {
+    transform: scale(0.95);
+}
+
+.auth-container button:focus {
+    outline: none;
+}
+
+.auth-container button.auth-ghost-btn {
+    background-color: transparent;
+    border-color: #ffffff;
+}
+
+.auth-error {
+    color: #dc3545;
+    /* Keep red for errors */
+    font-size: 12px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}

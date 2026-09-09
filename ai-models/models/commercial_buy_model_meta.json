@@ -1,0 +1,41 @@
+{
+  "model_name": "commercial_buy_model",
+  "algorithm": "XGBoost",
+  "features": [
+    "area_sqft",
+    "city_encoded",
+    "ptype_encoded",
+    "location_score",
+    "price_per_sqft",
+    "demand_score",
+    "latitude",
+    "longitude"
+  ],
+  "mae": 20127716.38695219,
+  "rmse": 62546811.174586,
+  "r2": 0.8915307538365386,
+  "feature_importances": {
+    "area_sqft": 0.49256759881973267,
+    "city_encoded": 0.03587200865149498,
+    "ptype_encoded": 0.0,
+    "location_score": 0.04436127841472626,
+    "price_per_sqft": 0.2572897970676422,
+    "demand_score": 0.05257060006260872,
+    "latitude": 0.05392850190401077,
+    "longitude": 0.0634102076292038
+  },
+  "train_samples": 1000,
+  "test_samples": 251,
+  "y_mean": 118860360.31654677,
+  "y_std": 206986939.81652203,
+  "cities": [
+    "Lahore",
+    "Islamabad",
+    "karachi",
+    "multan",
+    "faisalabad",
+    "peshawar",
+    "sialkot"
+  ],
+  "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+}

@@ -1,0 +1,235 @@
+{
+  "homes_buy": {
+    "model_name": "homes_buy_model",
+    "algorithm": "XGBoost",
+    "features": [
+      "area_sqft",
+      "bedrooms",
+      "bathrooms",
+      "city_encoded",
+      "ptype_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 5398383.051813471,
+    "rmse": 20039550.933583286,
+    "r2": 0.9283640408899791,
+    "feature_importances": {
+      "area_sqft": 0.40590447187423706,
+      "bedrooms": 0.08610127121210098,
+      "bathrooms": 0.03079848177731037,
+      "city_encoded": 0.03193368762731552,
+      "ptype_encoded": 0.0,
+      "location_score": 0.1702730804681778,
+      "price_per_sqft": 0.13494469225406647,
+      "demand_score": 0.08561836928129196,
+      "latitude": 0.03340959921479225,
+      "longitude": 0.021016303449869156
+    },
+    "train_samples": 1544,
+    "test_samples": 386,
+    "y_mean": 63921581.46010362,
+    "y_std": 72340105.13868275,
+    "cities": [
+      "Islamabad",
+      "Lahore",
+      "karachi",
+      "multan",
+      "faisalabad",
+      "sialkot",
+      "peshawar"
+    ],
+    "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+  },
+  "homes_rent": {
+    "model_name": "homes_rent_model",
+    "algorithm": "XGBoost",
+    "features": [
+      "area_sqft",
+      "bedrooms",
+      "bathrooms",
+      "city_encoded",
+      "ptype_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 29913.259446022726,
+    "rmse": 88941.07391142476,
+    "r2": 0.9547584041357025,
+    "feature_importances": {
+      "area_sqft": 0.3224332928657532,
+      "bedrooms": 0.12632447481155396,
+      "bathrooms": 0.04748739302158356,
+      "city_encoded": 0.05513175204396248,
+      "ptype_encoded": 0.0,
+      "location_score": 0.04112856835126877,
+      "price_per_sqft": 0.12275940924882889,
+      "demand_score": 0.2254486232995987,
+      "latitude": 0.03811853379011154,
+      "longitude": 0.021167853847146034
+    },
+    "train_samples": 879,
+    "test_samples": 220,
+    "y_mean": 288680.1637852593,
+    "y_std": 388440.17243409663,
+    "cities": [
+      "Islamabad",
+      "Lahore",
+      "multan",
+      "karachi",
+      "peshawar",
+      "sialkot",
+      "faisalabad"
+    ],
+    "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+  },
+  "plots_buy": {
+    "model_name": "plots_buy_model",
+    "algorithm": "XGBoost",
+    "features": [
+      "area_sqft",
+      "city_encoded",
+      "ptype_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 3450331.8898615637,
+    "rmse": 9289049.188440284,
+    "r2": 0.9563224000659134,
+    "feature_importances": {
+      "area_sqft": 0.41469642519950867,
+      "city_encoded": 0.035200335085392,
+      "ptype_encoded": 0.0,
+      "location_score": 0.04919055849313736,
+      "price_per_sqft": 0.3209095597267151,
+      "demand_score": 0.08080869168043137,
+      "latitude": 0.04153648763895035,
+      "longitude": 0.05765797570347786
+    },
+    "train_samples": 1227,
+    "test_samples": 307,
+    "y_mean": 34471794.328552805,
+    "y_std": 48003929.147644825,
+    "cities": [
+      "Islamabad",
+      "Lahore",
+      "peshawar",
+      "karachi",
+      "faisalabad",
+      "sialkot",
+      "multan"
+    ],
+    "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+  },
+  "commercial_buy": {
+    "model_name": "commercial_buy_model",
+    "algorithm": "XGBoost",
+    "features": [
+      "area_sqft",
+      "city_encoded",
+      "ptype_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 20127716.38695219,
+    "rmse": 62546811.174586,
+    "r2": 0.8915307538365386,
+    "feature_importances": {
+      "area_sqft": 0.49256759881973267,
+      "city_encoded": 0.03587200865149498,
+      "ptype_encoded": 0.0,
+      "location_score": 0.04436127841472626,
+      "price_per_sqft": 0.2572897970676422,
+      "demand_score": 0.05257060006260872,
+      "latitude": 0.05392850190401077,
+      "longitude": 0.0634102076292038
+    },
+    "train_samples": 1000,
+    "test_samples": 251,
+    "y_mean": 118860360.31654677,
+    "y_std": 206986939.81652203,
+    "cities": [
+      "Lahore",
+      "Islamabad",
+      "karachi",
+      "multan",
+      "faisalabad",
+      "peshawar",
+      "sialkot"
+    ],
+    "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+  },
+  "commercial_rent": {
+    "model_name": "commercial_rent_model",
+    "algorithm": "XGBoost",
+    "features": [
+      "area_sqft",
+      "city_encoded",
+      "ptype_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 110884.5241954596,
+    "rmse": 293195.0439571614,
+    "r2": 0.9323222564977588,
+    "feature_importances": {
+      "area_sqft": 0.5068908333778381,
+      "city_encoded": 0.026892604306340218,
+      "ptype_encoded": 0.0,
+      "location_score": 0.03178149089217186,
+      "price_per_sqft": 0.2189626395702362,
+      "demand_score": 0.08390039205551147,
+      "latitude": 0.0686403289437294,
+      "longitude": 0.0629316195845604
+    },
+    "train_samples": 954,
+    "test_samples": 239,
+    "y_mean": 862575.7451802179,
+    "y_std": 1079761.8827651364,
+    "cities": [
+      "Islamabad",
+      "Lahore",
+      "faisalabad",
+      "karachi",
+      "multan",
+      "sialkot",
+      "peshawar"
+    ],
+    "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+  },
+  "investment_score": {
+    "model_name": "investment_score_model",
+    "algorithm": "Random Forest",
+    "features": [
+      "area_sqft",
+      "bedrooms",
+      "bathrooms",
+      "city_encoded",
+      "location_score",
+      "price_per_sqft",
+      "demand_score",
+      "latitude",
+      "longitude"
+    ],
+    "mae": 0.3743992949651946,
+    "r2": 0.9313171570977117,
+    "train_samples": 5605,
+    "test_samples": 1402,
+    "formula": "IS = 0.4*RF + 0.35*Loc + 0.15*Demand + 0.10*Yield  (clamped 0-100)"
+  }
+}

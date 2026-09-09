@@ -1,0 +1,27 @@
+# ─── Dependencies ────────────────────────────────────────────
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+
+# ─── Build output ─────────────────────────────────────────────
+frontend/dist/
+frontend/dist-ssr/
+
+# ─── Environment variables — NEVER commit ─────────────────────
+.env
+.env.local
+.env.production
+backend/.env
+
+# ─── Logs ─────────────────────────────────────────────────────
+*.log
+backend/backend.log
+
+# ─── OS files ─────────────────────────────────────────────────
+.DS_Store
+Thumbs.db
+
+# ─── Editor ───────────────────────────────────────────────────
+.vscode/
+.idea/

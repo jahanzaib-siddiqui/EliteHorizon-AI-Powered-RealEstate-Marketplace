@@ -1,0 +1,57 @@
+/* Properties page extra */
+.prop-stat-row { display: grid; grid-template-columns: 260px 1fr; gap: 16px; }
+.prop-total-card { text-align: center; }
+.prop-total-icon {
+  width: 70px; height: 70px; border-radius: 18px;
+  background: #f0fdf4; border: 2px solid #bbf7d0;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 14px;
+}
+.prop-total-value { font-size: 44px; font-weight: 800; color: #15803d; line-height: 1; }
+.prop-total-label { font-size: 14.5px; color: #374151; font-weight: 700; margin-top: 8px; }
+.prop-total-sub   { font-size: 12.5px; color: #9ca3af; margin-top: 4px; }
+.prop-city-card { }
+
+.prop-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.prop-info-item { display: flex; gap: 12px; align-items: flex-start; }
+.prop-info-icon-wrap {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: #f0fdf4; border: 1px solid #bbf7d0;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.prop-info-label { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .7px; }
+.prop-info-value { font-size: 13.5px; color: #374151; font-weight: 500; margin-top: 2px; }
+
+.adm-card-section-title { font-size: 14.5px; font-weight: 700; color: #0d1f2d; margin: 0 0 14px; }
+
+/* Reusing dash city styles */
+.dash-city-list  { display: flex; flex-direction: column; gap: 12px; }
+.dash-city-row   { display: flex; align-items: center; gap: 10px; }
+.dash-city-name  { width: 90px; font-size: 13px; font-weight: 600; color: #374151; flex-shrink: 0; }
+.dash-city-bar-wrap { flex: 1; height: 8px; background: #f0fdf4; border-radius: 4px; overflow: hidden; }
+.dash-city-bar   { height: 100%; background: linear-gradient(90deg, #16a34a, #4ade80); border-radius: 4px; }
+.dash-city-count { width: 40px; text-align: right; font-size: 13px; font-weight: 700; color: #166534; flex-shrink: 0; }
+
+@media (max-width: 700px) {
+  .prop-stat-row  { grid-template-columns: 1fr; }
+  .prop-info-grid { grid-template-columns: 1fr; }
+}
+.prop-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.prop-info-item { display: flex; gap: 12px; align-items: flex-start; }
+.prop-info-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.prop-info-label { font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: .7px; }
+.prop-info-value { font-size: 13.5px; color: #374151; font-weight: 500; margin-top: 2px; }
+
+/* Reusing dash city styles from Dashboard.css */
+.dash-city-list { display: flex; flex-direction: column; gap: 12px; }
+.dash-city-row { display: flex; align-items: center; gap: 10px; }
+.dash-city-name { width: 90px; font-size: 13px; font-weight: 600; color: #374151; flex-shrink: 0; }
+.dash-city-bar-wrap { flex: 1; height: 8px; background: #f0fdf4; border-radius: 4px; overflow: hidden; }
+.dash-city-bar { height: 100%; background: linear-gradient(90deg, #16a34a, #4ade80); border-radius: 4px; }
+.dash-city-count { width: 40px; text-align: right; font-size: 13px; font-weight: 700; color: #166534; flex-shrink: 0; }
+
+@media (max-width: 700px) {
+  .prop-stat-row { grid-template-columns: 1fr; }
+  .prop-info-grid { grid-template-columns: 1fr; }
+}

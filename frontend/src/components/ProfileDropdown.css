@@ -1,0 +1,227 @@
+.profile-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.profile-header-trigger {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    padding: 5px 10px;
+    border-radius: 20px;
+    transition: background-color 0.2s;
+}
+
+.profile-header-trigger:hover {
+    background-color: #f1f1f1;
+}
+
+.profile-avatar-small {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #28a745;
+}
+
+.profile-name-text {
+    font-weight: bold;
+    color: #333;
+}
+
+/* Dropdown Container */
+.profile-dropdown {
+    position: absolute;
+    top: 50px;
+    right: 0;
+    width: 300px;
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 24px;
+    z-index: 1000;
+    border: 1px solid #eee;
+}
+
+/* View Mode */
+.profile-info-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #f1f1f1;
+    padding-bottom: 15px;
+    margin-bottom: 15px;
+}
+
+.profile-avatar-large {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #eee;
+    margin-bottom: 10px;
+}
+
+.profile-info-header h3 {
+    margin: 0 0 5px 0;
+    font-size: 18px;
+    color: #333;
+}
+
+.profile-email {
+    margin: 0;
+    font-size: 13px;
+    color: #777;
+}
+
+.profile-details-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.detail-label {
+    color: #666;
+}
+
+.detail-value {
+    font-weight: 600;
+    color: #28a745;
+}
+
+.chat-link {
+    cursor: pointer;
+    background: #f0fdf4;
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid #dcfce7;
+    margin-top: 4px;
+    transition: all 0.2s;
+}
+
+.chat-link:hover {
+    background: #dcfce7;
+    border-color: #28a745;
+}
+
+.link-text {
+    color: #1a7f4b !important;
+    font-weight: 700;
+}
+
+/* Actions */
+.profile-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-btn,
+.logout-btn,
+.save-btn,
+.cancel-btn {
+    border-radius: 6px;
+    padding: 8px 0;
+    font-size: 13px;
+    font-weight: bold;
+    cursor: pointer;
+    flex: 1;
+    text-transform: none;
+    letter-spacing: normal;
+    margin: 0;
+}
+
+.edit-btn {
+    background-color: transparent;
+    color: #28a745;
+    border: 1px solid #28a745;
+}
+
+.logout-btn {
+    background-color: #ff4b2b;
+    color: white;
+    border: none;
+}
+
+/* Edit Mode */
+.profile-edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-edit-form h3 {
+    margin: 0 0 10px 0;
+    text-align: center;
+}
+
+.profile-edit-form label {
+    font-size: 12px;
+    color: #666;
+    margin-bottom: -5px;
+}
+
+.avatar-selection-grid {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.avatar-choice {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform 0.2s, border-color 0.2s;
+}
+
+.avatar-choice:hover {
+    transform: scale(1.1);
+}
+
+.avatar-choice.selected {
+    border-color: #28a745;
+    transform: scale(1.1);
+    box-shadow: 0 0 8px rgba(40, 167, 69, 0.4);
+}
+
+.profile-edit-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: #f9f9f9;
+}
+
+.profile-actions-edit {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.cancel-btn {
+    background-color: transparent;
+    color: #666;
+    border: 1px solid #ddd;
+}
+
+.save-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+}
+
+.profile-error {
+    color: #ff4b2b;
+    font-size: 12px;
+    text-align: center;
+}

@@ -1,0 +1,149 @@
+.know-more-container {
+    position: relative;
+    cursor: pointer;
+    list-style: none;
+}
+
+.know-more-trigger {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-weight: 500;
+    color: #333;
+    /* Dark gray for standard text */
+    padding: 8px 12px;
+    border-radius: 6px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.know-more-trigger:hover,
+.know-more-trigger.active {
+    color: #28a745;
+    /* Green theme active state */
+}
+
+.chevron-icon {
+    font-size: 10px;
+    transition: transform 0.3s ease;
+}
+
+.chevron-icon.open {
+    transform: rotate(180deg);
+}
+
+/* Dropdown Popup */
+.know-more-dropdown {
+    position: absolute;
+    top: calc(100% + 15px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    border: 1px solid #eee;
+
+    /* Adds a little arrow tip pointing to the trigger */
+    animation: fadeInDown 0.2s ease-out forwards;
+}
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate(-50%, 0);
+    }
+}
+
+.know-more-dropdown::before {
+    content: '';
+    position: absolute;
+    top: -6px;
+    left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 12px;
+    height: 12px;
+    background-color: #ffffff;
+    border-left: 1px solid #eee;
+    border-top: 1px solid #eee;
+}
+
+/* List Items */
+.dropdown-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 12px;
+    border-radius: 8px;
+    transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+    background-color: #f8fcf9;
+    /* Very light green tint on hover */
+}
+
+.dropdown-item:hover .menu-icon {
+    color: #28a745;
+    /* Darken icon slightly */
+}
+
+.dropdown-item:hover h4 {
+    color: #28a745;
+}
+
+.icon-wrapper {
+    flex-shrink: 0;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #f0fdf4;
+    /* Lighter shade base */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-icon {
+    color: #38bdf8;
+    /* Uses a subtle blue like the original theme reference, but you can swap to green */
+    font-size: 16px;
+    color: #20c997;
+    /* Soft aesthetic green for the icons */
+}
+
+.item-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.item-content h4 {
+    margin: 0 0 4px 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #2c3e50;
+    transition: color 0.2s;
+}
+
+.item-content p {
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #7f8c8d;
+    /* Grey descriptive text */
+}
+
+/* Divider line */
+.dropdown-divider {
+    height: 1px;
+    background-color: #f1f2f6;
+    /* Very subtle grey dashed effect */
+    border-top: 1px dashed #e2e8f0;
+    margin: 8px 16px;
+}

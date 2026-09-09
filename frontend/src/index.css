@@ -1,0 +1,112 @@
+/* ===== Google Fonts ===== */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+
+/* ===== Global Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ===== Design Tokens ===== */
+:root {
+  /* ── Green Palette ── */
+  --eh-green-50:  #f0fdf4;
+  --eh-green-100: #dcfce7;
+  --eh-green-200: #bbf7d0;
+  --eh-green-300: #86efac;
+  --eh-green-400: #4ade80;
+  --eh-green-500: #22c55e;
+  --eh-green-600: #16a34a;
+  --eh-green-700: #15803d;
+  --eh-green-800: #166534;
+  --eh-green-900: #14532d;
+  --eh-green-950: #052e16;
+
+  /* ── Neutrals ── */
+  --eh-dark:      #0a1f16;
+  --eh-gray-50:   #f8fafc;
+  --eh-gray-100:  #f1f5f9;
+  --eh-gray-200:  #e2e8f0;
+  --eh-gray-600:  #475569;
+  --eh-gray-700:  #334155;
+  --eh-gray-800:  #1e293b;
+  --eh-gray-900:  #0f172a;
+
+  /* ── Surfaces ── */
+  --eh-body-bg:     #fcfefb;
+  --eh-card-bg:     #ffffff;
+  --eh-section-alt: #f6fbf9;
+
+  /* ── Shadows ── */
+  --eh-shadow-sm:   0 1px 2px rgba(0,0,0,0.05);
+  --eh-shadow-md:   0 4px 16px rgba(0,0,0,0.08);
+  --eh-shadow-lg:   0 10px 40px rgba(0,0,0,0.1);
+  --eh-shadow-green: 0 8px 30px rgba(22,163,74,0.18);
+
+  /* ── Typography ── */
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--eh-gray-800);
+  background-color: var(--eh-body-bg);
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ===== Layout ===== */
+html, body, #root {
+  width: 100%;
+  min-height: 100%;
+}
+
+body {
+  min-width: 320px;
+  background: var(--eh-body-bg);
+}
+
+/* ===== Links ===== */
+a {
+  font-weight: 500;
+  color: var(--eh-green-600);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+a:hover {
+  color: var(--eh-green-700);
+}
+
+/* ===== Headings ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--eh-gray-900);
+}
+
+h1 { font-size: 3.2em; }
+h2 { font-size: 2rem; }
+
+/* ===== Buttons ===== */
+button {
+  border-radius: 8px;
+  border: none;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+button:hover {
+  opacity: 0.92;
+}
+
+/* ===== Selection ===== */
+::selection {
+  background: var(--eh-green-200);
+  color: var(--eh-green-900);
+}

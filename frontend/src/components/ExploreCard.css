@@ -1,0 +1,52 @@
+.explore-card {
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px 24px;
+  text-align: center;
+  border: 1px solid #e6e6e6;
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+/* MAIN HOVER EFFECT */
+.explore-card:hover {
+  background-color: #f0faf7;       /* light green */
+  border-color: #0f7c5c;
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(15, 124, 92, 0.15);
+}
+
+.explore-icon {
+  font-size: 38px;
+  color: #0f7c5c;
+  margin-bottom: 18px;
+}
+
+.explore-title {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #222;
+}
+
+.explore-desc {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 22px;
+  line-height: 1.5;
+}
+
+.explore-btn {
+  background-color: #0f7c5c;
+  color: #ffffff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 22px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.explore-btn:hover {
+  background-color: #0c634a;
+}

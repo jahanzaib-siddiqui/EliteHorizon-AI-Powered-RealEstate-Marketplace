@@ -1,0 +1,302 @@
+/* Elite Horizon Advanced Filtering Styles */
+
+.houses-page-wrapper {
+  background-color: #fcfcfd;
+  min-height: calc(100vh - 80px);
+  /* Fill screen minus navbar approx */
+  padding-bottom: 60px;
+}
+
+/* Header Section styling */
+.filter-header-section {
+  background-color: #ffffff;
+  padding: 30px 40px;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* Base Pill Group container */
+.pill-group {
+  display: inline-flex;
+  align-items: center;
+  /* Ensures content is vertically aligned inside group */
+  background-color: #f1f5f9;
+  padding: 4px;
+  /* Reduced top/bottom padding to tighten shape */
+  border-radius: 50px;
+  gap: 4px;
+}
+
+/* Variation for center alignments */
+.center-pill {
+  margin: 0 auto;
+}
+
+/* Variation for top BUY / RENT */
+.large-pill {
+  padding: 4px;
+  /* Tighter padding wrapper */
+  border-radius: 60px;
+}
+
+.large-pill .pill-btn {
+  padding: 8px 40px;
+  /* Reduced top/bottom padding */
+  font-size: 15px;
+  font-weight: 700;
+  border-radius: 40px;
+}
+
+/* Individual Pill Button */
+.pill-btn {
+  border: none;
+  background-color: transparent;
+  color: #475569;
+  border-radius: 30px;
+  padding: 8px 24px;
+  /* Reduced top/bottom padding internally */
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 1;
+  /* Normalizes line heights that push text upwards */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Toggled State */
+.pill-btn.active {
+  background-color: #334155;
+  /* Slate dark gray as per mockup */
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pill-btn:hover:not(.active) {
+  background-color: #e2e8f0;
+}
+
+/* Font Adjustments */
+.text-sm {
+  font-size: 13px;
+  padding: 8px 20px;
+  /* Reduced top/bottom padding internally */
+}
+
+.text-xs {
+  font-size: 12px;
+  padding: 8px 16px;
+  /* Reduced top/bottom padding internally */
+  letter-spacing: 0.5px;
+}
+
+/* Classes safely deleted to prevent margin bleeding inside the filter header */
+
+/* Filter Rows for Category/Size/City */
+.filter-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 25px;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 1200px;
+}
+
+.filter-block {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.filter-label {
+  font-weight: 700;
+  color: #1e293b;
+  font-size: 14px;
+}
+
+/* Sleek City Dropdown */
+.city-select-dropdown {
+  padding: 10px 16px;
+  border-radius: 20px;
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  font-size: 14px;
+  font-weight: 600;
+  color: #334155;
+  outline: none;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+  min-width: 140px;
+}
+
+.city-select-dropdown:focus {
+  border-color: #94a3b8;
+}
+
+/* --------------------------------- */
+/* Grid Layout for Properties */
+/* --------------------------------- */
+
+.properties-display-container {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.results-header {
+  margin-bottom: 30px;
+}
+
+.results-header h2 {
+  font-size: 24px;
+  color: #0f172a;
+  font-weight: 700;
+}
+
+.responsive-property-grid {
+  display: grid;
+  /* This automatically creates as many columns as will fit based on the min-width. 
+       280px matches the general size of the PropertyCard */
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+}
+
+/* Fallback states */
+.loading-spinner {
+  text-align: center;
+  padding: 80px;
+  font-size: 18px;
+  color: #64748b;
+  font-weight: 600;
+}
+
+.no-results-box {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 1px dashed #cbd5e1;
+}
+
+.no-results-box h3 {
+  margin: 0 0 10px;
+  color: #334155;
+}
+
+.no-results-box p {
+  color: #64748b;
+  margin-bottom: 25px;
+}
+
+.reset-btn {
+  background-color: #28a745;
+  /* System green */
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.reset-btn:hover {
+  background-color: #218838;
+}
+
+/* --------------------------------- */
+/* Multi-City Portals & Pagination */
+/* --------------------------------- */
+
+.city-portal-section {
+  margin-bottom: 80px;
+  background-color: #ffffff;
+  border-radius: 16px;
+  padding: 30px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  border: 1px solid #e2e8f0;
+}
+
+.city-header-box {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 25px;
+  border-bottom: 2px solid #f1f5f9;
+  padding-bottom: 15px;
+}
+
+.city-portal-title {
+  font-size: 28px;
+  color: #0f172a;
+  font-weight: 800;
+  margin: 0;
+}
+
+.city-meta-data {
+  color: #64748b;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.city-map-container {
+  margin-bottom: 30px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+}
+
+/* React Leaflet z-index fix */
+.leaflet-container {
+  z-index: 1;
+}
+
+.grid-pagination-wrapper {
+  display: flex;
+  flex-direction: column;
+}
+
+.city-pagination-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 40px;
+  gap: 20px;
+}
+
+.page-indicator {
+  font-weight: 600;
+  color: #475569;
+  font-size: 15px;
+}
+
+.page-nav-btn {
+  background-color: #f1f5f9;
+  border: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  min-width: 0;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: #334155;
+  transition: all 0.2s;
+}
+
+.page-nav-btn:hover:not(:disabled) {
+  background-color: #e2e8f0;
+  transform: scale(1.05);
+}
+
+.page-nav-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}

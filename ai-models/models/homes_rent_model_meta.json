@@ -1,0 +1,45 @@
+{
+  "model_name": "homes_rent_model",
+  "algorithm": "XGBoost",
+  "features": [
+    "area_sqft",
+    "bedrooms",
+    "bathrooms",
+    "city_encoded",
+    "ptype_encoded",
+    "location_score",
+    "price_per_sqft",
+    "demand_score",
+    "latitude",
+    "longitude"
+  ],
+  "mae": 29913.259446022726,
+  "rmse": 88941.07391142476,
+  "r2": 0.9547584041357025,
+  "feature_importances": {
+    "area_sqft": 0.3224332928657532,
+    "bedrooms": 0.12632447481155396,
+    "bathrooms": 0.04748739302158356,
+    "city_encoded": 0.05513175204396248,
+    "ptype_encoded": 0.0,
+    "location_score": 0.04112856835126877,
+    "price_per_sqft": 0.12275940924882889,
+    "demand_score": 0.2254486232995987,
+    "latitude": 0.03811853379011154,
+    "longitude": 0.021167853847146034
+  },
+  "train_samples": 879,
+  "test_samples": 220,
+  "y_mean": 288680.1637852593,
+  "y_std": 388440.17243409663,
+  "cities": [
+    "Islamabad",
+    "Lahore",
+    "multan",
+    "karachi",
+    "peshawar",
+    "sialkot",
+    "faisalabad"
+  ],
+  "formula": "Final Prediction = Sum(gamma_i * Tree_i(x)) for i=1..N_estimators"
+}
