@@ -221,7 +221,7 @@ export default function AIPricePrediction() {
 
   /* Check API health */
   useEffect(() => {
-    fetch(`${API_URL}/api/health`)
+    fetch(`${API_URL}/api/health`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
       .then(r => r.json())
       .then(() => setApiStatus('ok'))
       .catch(() => setApiStatus('offline'));
@@ -262,7 +262,7 @@ export default function AIPricePrediction() {
 
       const res  = await fetch(`${API_URL}/api/predict`, {
         method : 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body   : JSON.stringify(body),
       });
       const data = await res.json();

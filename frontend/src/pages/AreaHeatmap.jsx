@@ -295,7 +295,7 @@ export default function AreaHeatmap() {
           ? ['lahore', 'islamabad', 'karachi', 'multan', 'peshawar', 'sialkot', 'faisalabad']
           : [city];
         const responses = await Promise.all(
-          cities.map((c) => fetch(`${API_URL}/api/heatmap-data/${c}`).then((r) => r.json()))
+          cities.map((c) => fetch(`${API_URL}/api/heatmap-data/${c}`, { headers: { 'ngrok-skip-browser-warning': 'true' } }).then((r) => r.json()))
         );
         const failed = responses.find((r) => !r.success);
         if (failed) { setError(failed.error || 'Failed to load data'); return; }

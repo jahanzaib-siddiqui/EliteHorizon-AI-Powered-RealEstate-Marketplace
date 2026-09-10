@@ -123,7 +123,7 @@ export default function InvestmentScore() {
 
   // Check API health on mount
   useEffect(() => {
-    fetch(`${API_URL}/api/health`)
+    fetch(`${API_URL}/api/health`, { headers: { 'ngrok-skip-browser-warning': 'true' } })
       .then((res) => res.json())
       .then(() => setApiStatus('ok'))
       .catch(() => setApiStatus('offline'));
@@ -176,7 +176,7 @@ export default function InvestmentScore() {
     try {
       const res = await fetch(`${API_URL}/api/investment-score`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', 'ngrok-skip-browser-warning': 'true' },
         body: JSON.stringify({
           area: parseFloat(area),
           area_unit: areaUnit,
