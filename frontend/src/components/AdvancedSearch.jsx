@@ -74,7 +74,7 @@ const ALL_CITIES = [
 ];
 
 const statBadges = [
-  { label: "2K+",  sub: "Properties" },
+  { label: "7K+",  sub: "Properties" },
   { label: "7",    sub: "Cities" },
   { label: "AI",   sub: "Powered" },
 ];
@@ -177,7 +177,7 @@ function AdvancedSearch({ onSearch }) {
           marginBottom: "32px", fontWeight: 400,
           animation: "fadeUp 0.7s 0.15s cubic-bezier(0.22,1,0.36,1) both",
         }}>
-          Explore 2,000+ real properties across 7 cities with AI-powered insights
+          Explore 7,000+ real properties across 7 cities with AI-powered insights
         </p>
 
         {/* Buy / Rent Toggle */}
