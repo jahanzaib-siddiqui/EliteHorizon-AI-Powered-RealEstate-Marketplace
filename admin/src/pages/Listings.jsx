@@ -2,6 +2,8 @@ import React, { useEffect, useState, useCallback } from 'react';
 import './Listings.css';
 
 const API_BASE = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API_BASE}${url}`;
+const FRONTEND_URL = 'https://elite-horizon-ai-powered-real-estat-woad.vercel.app';
 const token = () => localStorage.getItem('adminToken');
 
 /* ─── SVG Icon Library ─── */
@@ -191,13 +193,13 @@ const Listings = () => {
               <div 
                 key={l._id} 
                 className="lst2-card"
-                onClick={() => window.open(`${window.location.origin.replace(/-admin\b/, '')}/properties/${l._id}`, '_blank')}
+                onClick={() => window.open(`${FRONTEND_URL}/properties/${l._id}`, '_blank')}
                 style={{ cursor: 'pointer' }}
               >
                 {/* Image */}
                 <div className="lst2-card-img">
                   {l.media?.images?.[0]
-                    ? <img src={`${API_BASE}${l.media.images[0]}`} alt={l.adInfo?.title} />
+                    ? <img src={imgSrc(l.media.images[0])} alt={l.adInfo?.title} />
                     : <div className="lst2-card-no-img">
                         <Icon name="image" size={32} color="#d1d5db" />
                         <span>No Image</span>
