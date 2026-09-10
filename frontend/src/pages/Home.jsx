@@ -27,6 +27,7 @@ import {
 import "./Home.css";
 
 const API = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API}${url}`;
 
 const fmtPrice = (v) => {
   if (!v) return "N/A";
@@ -313,7 +314,7 @@ function Home() {
                 {/* Image */}
                 <div className="home-fl-img">
                   {p.media?.images?.[0]
-                    ? <img src={`${API}${p.media.images[0]}`} alt={p.adInfo?.title} />
+                    ? <img src={imgSrc(p.media.images[0])} alt={p.adInfo?.title} />
                     : <div className="home-fl-no-img">No Image</div>}
                   <span className={`home-fl-badge ${p.purpose === "Sell" ? "home-fl-sale" : "home-fl-rent"}`}>
                     {p.purpose === "Sell" ? "For Sale" : "For Rent"}

@@ -3,6 +3,7 @@ import Icon from '../components/Icon';
 import './Users.css';
 
 const token = () => localStorage.getItem('adminToken');
+const API_BASE = import.meta.env.VITE_API_URL;
 
 const Users = () => {
   const [users, setUsers]         = useState([]);
@@ -17,7 +18,7 @@ const Users = () => {
   const fetchUsers = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/admin/users?page=${page}&limit=15&search=${encodeURIComponent(search)}`,
+      const res = await fetch(`${API_BASE}/api/admin/users?page=${page}&limit=15&search=${encodeURIComponent(search)}`,
         { headers: { Authorization: `Bearer ${token()}` } });
       const data = await res.json();
       setUsers(data.users || []);
@@ -32,7 +33,7 @@ const Users = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await fetch(`/api/admin/users/${deleteTarget._id}`, {
+      await fetch(`${API_BASE}/api/admin/users/${deleteTarget._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token()}` }
       });

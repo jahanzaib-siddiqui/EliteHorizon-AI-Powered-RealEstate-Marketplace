@@ -4,6 +4,7 @@ import ChatBox from "../components/ChatBox";
 import "./SellerDashboard.css";
 
 const API = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API}${url}`;
 
 /* ─── Inline SVG icon library ─── */
 const Icon = ({ name, size = 18, color = "currentColor", strokeWidth = 1.75 }) => {
@@ -305,7 +306,7 @@ const SellerDashboard = () => {
                                         <div key={p._id} className="sd-prop-row">
                                             <div className="sd-prop-thumb">
                                                 {p.media?.images?.[0]
-                                                    ? <img src={`${API}${p.media.images[0]}`} alt="" />
+                                                    ? <img src={imgSrc(p.media.images[0])} alt="" />
                                                     : <Icon name="image" size={24} color="#d1d5db" />}
                                             </div>
                                             <div className="sd-prop-info">
@@ -378,7 +379,7 @@ const SellerDashboard = () => {
                                         {/* Image */}
                                         <div className="sd-listing-img">
                                             {p.media?.images?.[0]
-                                                ? <img src={`${API}${p.media.images[0]}`} alt={p.adInfo?.title} />
+                                                ? <img src={imgSrc(p.media.images[0])} alt={p.adInfo?.title} />
                                                 : <div className="sd-listing-no-img">
                                                     <Icon name="image" size={36} color="#d1d5db" />
                                                   </div>}

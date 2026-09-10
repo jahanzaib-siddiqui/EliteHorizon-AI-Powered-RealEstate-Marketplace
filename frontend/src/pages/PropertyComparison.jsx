@@ -5,6 +5,7 @@ import { FaSearch, FaCheck, FaTimes, FaTrashAlt, FaPlus, FaBalanceScale } from "
 import "./PropertyComparison.css";
 
 const API = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API}${url}`;
 
 function PropertyComparison() {
   const navigate = useNavigate();
@@ -118,7 +119,7 @@ function PropertyComparison() {
                     >
                       <div className="pc-di-img">
                         {p.media?.images?.[0] ? (
-                          <img src={`${API}${p.media.images[0]}`} alt="" />
+                          <img src={imgSrc(p.media.images[0])} alt="" />
                         ) : (
                           <div className="pc-di-placeholder">No Img</div>
                         )}
@@ -170,7 +171,7 @@ function PropertyComparison() {
                            title="Click to view details"
                         >
                           {p.media?.images?.[0] ? (
-                            <img src={`${API}${p.media.images[0]}`} alt="" />
+                            <img src={imgSrc(p.media.images[0])} alt="" />
                           ) : (
                             <div className="pc-img-fallback">No Image</div>
                           )}

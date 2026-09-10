@@ -5,6 +5,7 @@ import ChatBox from "../components/ChatBox";
 import "./PropertyDetail.css";
 
 const API = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API}${url}`;
 
 /* ─── Inline SVG icons ─── */
 const Icon = ({ name, size = 18, color = "currentColor", strokeWidth = 1.75 }) => {
@@ -65,7 +66,7 @@ const Lightbox = ({ images, startIdx, onClose }) => {
             <button className="pd-lb-prev" onClick={e => { e.stopPropagation(); setIdx(i => (i - 1 + images.length) % images.length); }}>
                 <Icon name="chevLeft" size={26} color="white" />
             </button>
-            <img className="pd-lb-img" src={`${API}${images[idx]}`} alt="" onClick={e => e.stopPropagation()} />
+            <img className="pd-lb-img" src={imgSrc(images[idx])} alt="" onClick={e => e.stopPropagation()} />
             <button className="pd-lb-next" onClick={e => { e.stopPropagation(); setIdx(i => (i + 1) % images.length); }}>
                 <Icon name="chevRight" size={26} color="white" />
             </button>
