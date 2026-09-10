@@ -29,7 +29,7 @@ const Approvals = () => {
   const handleApprove = async (id) => {
     setProcessing(id);
     try {
-      await fetch(`/api/admin/approve/${id}`, {
+      await fetch(`${API_BASE}/api/admin/approve/${id}`, {
         method: 'POST', headers: { Authorization: `Bearer ${token()}` }
       });
       setListings(prev => prev.filter(l => l._id !== id));
@@ -40,7 +40,7 @@ const Approvals = () => {
     if (!rejectTarget || !rejectReason.trim()) return;
     setProcessing(rejectTarget._id);
     try {
-      await fetch(`/api/admin/reject/${rejectTarget._id}`, {
+      await fetch(`${API_BASE}/api/admin/reject/${rejectTarget._id}`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${token()}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ reason: rejectReason })
@@ -141,7 +141,7 @@ const Approvals = () => {
               {/* Images */}
               <div className="apr-images">
                 {(l.media?.images || []).slice(0, 4).map((img, i) => (
-                  <img key={i} src={`${API_BASE}${img}`} alt="" className="apr-thumb" />
+                  <img key={i} src={img} alt="" className="apr-thumb" />
                 ))}
                 {(l.media?.images?.length || 0) === 0 && (
                   <div className="apr-no-img">
