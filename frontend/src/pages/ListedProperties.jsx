@@ -4,6 +4,7 @@ import Footer from "../components/Footer";
 import "./ListedProperties.css";
 
 const API = import.meta.env.VITE_API_URL;
+const imgSrc = (url) => url?.startsWith('http') ? url : `${API}${url}`;
 
 /* ─── Inline SVG icons ─── */
 const Icon = ({ name, size = 16, color = "currentColor" }) => {
@@ -78,7 +79,7 @@ const PropCard = ({ p }) => {
             {/* ── Image ── */}
             <div className="lp-card-img">
                 {imgs.length > 0
-                    ? <img src={`${API}${imgs[imgIdx]}`} alt={p.adInfo?.title} />
+                    ? <img src={imgSrc(imgs[imgIdx])} alt={p.adInfo?.title} />
                     : <div className="lp-card-no-img"><Icon name="image" size={44} color="#d1d5db" /><span>No Photo</span></div>
                 }
                 {imgs.length > 1 && (

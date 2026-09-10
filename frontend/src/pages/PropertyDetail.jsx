@@ -74,7 +74,7 @@ const Lightbox = ({ images, startIdx, onClose }) => {
             {/* Thumbnails */}
             <div className="pd-lb-thumbs" onClick={e => e.stopPropagation()}>
                 {images.map((img, i) => (
-                    <img key={i} src={`${API}${img}`} alt=""
+                    <img key={i} src={imgSrc(img)} alt=""
                         className={`pd-lb-thumb ${i === idx ? "pd-lb-thumb-active" : ""}`}
                         onClick={() => setIdx(i)} />
                 ))}
@@ -345,10 +345,10 @@ const PropertyDetail = () => {
                             {/* Blurred background layer — fills letterbox gaps with the same image */}
                             <div
                                 className="pd-gallery-blur-bg"
-                                style={{ backgroundImage: `url(${API}${imgs[mainImg]})` }}
+                                style={{ backgroundImage: `url(${imgSrc(imgs[mainImg])})` }}
                             />
                             {/* Main sharp image on top */}
-                            <img src={`${API}${imgs[mainImg]}`} alt={prop.adInfo?.title} />
+                            <img src={imgSrc(imgs[mainImg])} alt={prop.adInfo?.title} />
                         </>
                     ) : (
                         <div className="pd-no-img"><Icon name="image" size={60} color="#d1d5db" /></div>
@@ -381,7 +381,7 @@ const PropertyDetail = () => {
                             <div key={i}
                                 className={`pd-thumb-wrap ${i === mainImg ? "pd-thumb-active" : ""}`}
                                 onClick={() => setMainImg(i)}>
-                                <img src={`${API}${img}`} alt="" />
+                                <img src={imgSrc(img)} alt="" />
                                 {i === 3 && imgs.length > 4 && (
                                     <div className="pd-more-overlay" onClick={() => setLightbox(0)}>
                                         +{imgs.length - 4} more
@@ -397,7 +397,7 @@ const PropertyDetail = () => {
             {imgs.length > 1 && (
                 <div className="pd-strip">
                     {imgs.map((img, i) => (
-                        <img key={i} src={`${API}${img}`} alt=""
+                        <img key={i} src={imgSrc(img)} alt=""
                             className={`pd-strip-img ${i === mainImg ? "pd-strip-active" : ""}`}
                             onClick={() => setMainImg(i)} />
                     ))}

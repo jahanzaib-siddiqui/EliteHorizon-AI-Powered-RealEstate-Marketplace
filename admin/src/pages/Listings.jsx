@@ -50,12 +50,12 @@ const Listings = () => {
     setLoading(true);
     try {
       const [mainRes, allRes, pendRes, apprRes, rejRes] = await Promise.all([
-        fetch(`/api/admin/listings?page=${page}&limit=9&search=${encodeURIComponent(search)}&status=${statusFilter}`,
+        fetch(`${API_BASE}/api/admin/listings?page=${page}&limit=9&search=${encodeURIComponent(search)}&status=${statusFilter}`,
           { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch(`/api/admin/listings?page=1&limit=1`, { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch(`/api/admin/listings?page=1&limit=1&status=pending`,  { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch(`/api/admin/listings?page=1&limit=1&status=approved`, { headers: { Authorization: `Bearer ${token()}` } }),
-        fetch(`/api/admin/listings?page=1&limit=1&status=rejected`, { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch(`${API_BASE}/api/admin/listings?page=1&limit=1`, { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch(`${API_BASE}/api/admin/listings?page=1&limit=1&status=pending`,  { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch(`${API_BASE}/api/admin/listings?page=1&limit=1&status=approved`, { headers: { Authorization: `Bearer ${token()}` } }),
+        fetch(`${API_BASE}/api/admin/listings?page=1&limit=1&status=rejected`, { headers: { Authorization: `Bearer ${token()}` } }),
       ]);
       const [data, all, pend, appr, rej] = await Promise.all(
         [mainRes, allRes, pendRes, apprRes, rejRes].map(r => r.json())
@@ -73,7 +73,7 @@ const Listings = () => {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
-      await fetch(`/api/admin/listings/${deleteTarget._id}`, {
+      await fetch(`${API_BASE}/api/admin/listings/${deleteTarget._id}`, {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token()}` }
       });
