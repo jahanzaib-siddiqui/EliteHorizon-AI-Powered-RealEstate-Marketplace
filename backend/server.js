@@ -24,22 +24,29 @@ app.use(cors({
 }));
 
 // ── Cached MongoDB connection for Vercel serverless ──────────────────────────
-// Vercel spins up a new function instance per request. Without caching,
-// every request opens a new connection and times out before it finishes.
-let isConnected = false;
+// On Vercel, module scope is shared within one function instance.
+// We use mongoose.connection.readyState as the single source of truth.
+let connectionPromise = null;
 
 async function connectDB() {
-  if (isConnected) return;                        // reuse existing connection
-  if (mongoose.connection.readyState >= 1) {      // already connecting/connected
-    isConnected = true;
+  const state = mongoose.connection.readyState;
+  if (state === 1) return;          // 1 = connected  ✅
+  if (state === 2) {                // 2 = connecting — wait for it
+    await connectionPromise;
     return;
   }
-  await mongoose.connect(process.env.MONGO_URI, {
-    serverSelectionTimeoutMS: 10000,              // fail fast if Atlas unreachable
+  // state 0 (disconnected) or 3 (disconnecting) — reconnect
+  if (!process.env.MONGO_URI) {
+    throw new Error("MONGO_URI environment variable is not set");
+  }
+  connectionPromise = mongoose.connect(process.env.MONGO_URI, {
+    serverSelectionTimeoutMS: 8000,
     socketTimeoutMS: 45000,
+    maxPoolSize: 10,
+    bufferCommands: false,          // fail fast instead of queuing when disconnected
   });
-  isConnected = true;
-  console.log("MongoDB connected");
+  await connectionPromise;
+  console.log("MongoDB connected (readyState:", mongoose.connection.readyState, ")");
 }
 
 // Middleware: ensure DB is connected before every request
@@ -49,7 +56,7 @@ app.use(async (req, res, next) => {
     next();
   } catch (err) {
     console.error("MongoDB connection error:", err.message);
-    res.status(500).json({ message: "Database connection failed" });
+    res.status(500).json({ message: "Database connection failed", detail: err.message });
   }
 });
 

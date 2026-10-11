@@ -40,11 +40,15 @@ function uploadToCloudinary(buffer, mimetype) {
 // ── GET /api/seller/listings/featured  (top 8 approved — public)
 router.get("/listings/featured", async (req, res) => {
     try {
-        const listings = await SellerProperty.find({ status: "approved" })
+        const listings = await SellerProperty.find({
+            status: { $in: ["approved"] }
+        })
             .sort({ createdAt: -1 })
             .limit(8);
+        console.log(`[featured] found ${listings.length} approved listings`);
         res.json({ listings });
     } catch (err) {
+        console.error("[featured] error:", err.message);
         res.status(500).json({ message: "Server error", detail: err.message });
     }
 });

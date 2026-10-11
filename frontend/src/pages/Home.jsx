@@ -150,8 +150,11 @@ function Home() {
   useEffect(() => {
     fetch(`${API}/api/seller/listings/featured`)
       .then(r => r.json())
-      .then(d => setFeaturedListings(d.listings || []))
-      .catch(() => {});
+      .then(d => {
+        console.log('[featured listings]', d);
+        setFeaturedListings(d.listings || []);
+      })
+      .catch(err => console.error('[featured listings error]', err));
   }, []);
 
   const [isSearched, setIsSearched] = useState(false);
