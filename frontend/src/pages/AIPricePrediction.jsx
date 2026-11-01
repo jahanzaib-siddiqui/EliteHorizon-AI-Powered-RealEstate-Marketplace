@@ -300,19 +300,35 @@ export default function AIPricePrediction() {
   };
 
   /* ── Bedroom sanity check ────────────────────────────────────────────────
-     Thresholds: >6 beds in ≤5 marla | >8 beds in ≤10 marla | >12 beds in ≤1 kanal
-     Returns a single red warning string, or null if inputs are practical.  */
+     Thresholds: >6 beds in ≤5 marla | >8 beds in ≤10 marla | >12 beds in ≤1 kanal */
   const getBedroomWarning = () => {
     if (['plot', 'commercial'].includes(propType?.key)) return null;
     const AREA_C = { marla: 272.25, kanal: 5445.0, sqft: 1.0 };
     const sqft   = parseFloat(area) * (AREA_C[areaUnit] || 272.25);
     const marlas = sqft / 272.25;
-    if (marlas <= 5  && bedrooms > 6)  return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
-    if (marlas <= 10 && bedrooms > 8)  return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
-    if (marlas <= 20 && bedrooms > 12) return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
+    const m = Math.round(marlas * 10) / 10;   // display as marla always
+    if (marlas <= 5  && bedrooms > 6)  return `⚠️ ${bedrooms} bedrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    if (marlas <= 10 && bedrooms > 8)  return `⚠️ ${bedrooms} bedrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    if (marlas <= 20 && bedrooms > 12) return `⚠️ ${bedrooms} bedrooms in ${m} marla is not practical — model accuracy may be affected.`;
     return null;
   };
-  const bedroomWarning = (step === 2 || step === 4) ? getBedroomWarning() : null;
+
+  /* ── Bathroom sanity check ───────────────────────────────────────────────
+     Thresholds: >4 baths in ≤5 marla | >8 baths in ≤10 marla | >12 baths in ≤1 kanal */
+  const getBathroomWarning = () => {
+    if (['plot'].includes(propType?.key)) return null;
+    const AREA_C = { marla: 272.25, kanal: 5445.0, sqft: 1.0 };
+    const sqft   = parseFloat(area) * (AREA_C[areaUnit] || 272.25);
+    const marlas = sqft / 272.25;
+    const m = Math.round(marlas * 10) / 10;
+    if (marlas <= 5  && bathrooms > 4)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    if (marlas <= 10 && bathrooms > 8)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    if (marlas <= 20 && bathrooms > 12) return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    return null;
+  };
+
+  const bedroomWarning  = (step === 2 || step === 4) ? getBedroomWarning()  : null;
+  const bathroomWarning = (step === 2 || step === 4) ? getBathroomWarning() : null;
 
   /* Feature importance display */
   const fiDisplay = prediction?.feature_importances
@@ -574,6 +590,16 @@ export default function AIPricePrediction() {
                       <span className="ai-count-val">{bathrooms}</span>
                       <button className="ai-count-btn" onClick={() => setBathrooms(Math.min(10, bathrooms + 1))}>+</button>
                     </div>
+                    {/* Red live warning for bathrooms */}
+                    {bathroomWarning && (
+                      <div style={{
+                        fontSize: '0.75rem', color: '#b91c1c', fontWeight: '600',
+                        background: '#fef2f2', border: '1px solid #f87171',
+                        borderRadius: '6px', padding: '5px 10px', marginTop: '6px',
+                      }}>
+                        {bathroomWarning}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -649,22 +675,29 @@ export default function AIPricePrediction() {
                 Based on {modelStats.trained_on?.toLocaleString() || '—'} real properties · Model R² = {r2Pct}%
               </p>
 
-              {/* ── Single red warning line — impractical bedroom/area combo ── */}
-              {bedroomWarning && (
-                <div style={{
-                  background: '#fef2f2',
-                  border: '1px solid #f87171',
-                  borderRadius: '8px',
-                  padding: '10px 16px',
-                  marginBottom: '16px',
-                  color: '#b91c1c',
-                  fontSize: '0.84rem',
-                  fontWeight: '600',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                }}>
-                  {bedroomWarning}
+              {/* ── Red warning lines — impractical bedroom/bathroom combos ── */}
+              {(bedroomWarning || bathroomWarning) && (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '16px' }}>
+                  {bedroomWarning && (
+                    <div style={{
+                      background: '#fef2f2', border: '1px solid #f87171',
+                      borderRadius: '8px', padding: '10px 16px',
+                      color: '#b91c1c', fontSize: '0.84rem', fontWeight: '600',
+                      display: 'flex', alignItems: 'center', gap: '8px',
+                    }}>
+                      {bedroomWarning}
+                    </div>
+                  )}
+                  {bathroomWarning && (
+                    <div style={{
+                      background: '#fef2f2', border: '1px solid #f87171',
+                      borderRadius: '8px', padding: '10px 16px',
+                      color: '#b91c1c', fontSize: '0.84rem', fontWeight: '600',
+                      display: 'flex', alignItems: 'center', gap: '8px',
+                    }}>
+                      {bathroomWarning}
+                    </div>
+                  )}
                 </div>
               )}
 
