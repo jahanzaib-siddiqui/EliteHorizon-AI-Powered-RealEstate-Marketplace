@@ -299,6 +299,21 @@ export default function AIPricePrediction() {
     return true;
   };
 
+  /* ── Bedroom sanity check ────────────────────────────────────────────────
+     Thresholds: >6 beds in ≤5 marla | >8 beds in ≤10 marla | >12 beds in ≤1 kanal
+     Returns a single red warning string, or null if inputs are practical.  */
+  const getBedroomWarning = () => {
+    if (['plot', 'commercial'].includes(propType?.key)) return null;
+    const AREA_C = { marla: 272.25, kanal: 5445.0, sqft: 1.0 };
+    const sqft   = parseFloat(area) * (AREA_C[areaUnit] || 272.25);
+    const marlas = sqft / 272.25;
+    if (marlas <= 5  && bedrooms > 6)  return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
+    if (marlas <= 10 && bedrooms > 8)  return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
+    if (marlas <= 20 && bedrooms > 12) return `⚠️ ${bedrooms} bedrooms in ${area} ${areaUnit} is not practical — model accuracy may be affected.`;
+    return null;
+  };
+  const bedroomWarning = (step === 2 || step === 4) ? getBedroomWarning() : null;
+
   /* Feature importance display */
   const fiDisplay = prediction?.feature_importances
     ? Object.entries(prediction.feature_importances)
@@ -537,6 +552,16 @@ export default function AIPricePrediction() {
                       <span className="ai-count-val">{bedrooms}</span>
                       <button className="ai-count-btn" onClick={() => setBedrooms(Math.min(12, bedrooms + 1))}>+</button>
                     </div>
+                    {/* Red live warning — same thresholds as Step 4 results */}
+                    {bedroomWarning && (
+                      <div style={{
+                        fontSize: '0.75rem', color: '#b91c1c', fontWeight: '600',
+                        background: '#fef2f2', border: '1px solid #f87171',
+                        borderRadius: '6px', padding: '5px 10px', marginTop: '6px',
+                      }}>
+                        {bedroomWarning}
+                      </div>
+                    )}
                   </div>
                 )}
 
@@ -623,6 +648,25 @@ export default function AIPricePrediction() {
               <p className="ai-step-sub">
                 Based on {modelStats.trained_on?.toLocaleString() || '—'} real properties · Model R² = {r2Pct}%
               </p>
+
+              {/* ── Single red warning line — impractical bedroom/area combo ── */}
+              {bedroomWarning && (
+                <div style={{
+                  background: '#fef2f2',
+                  border: '1px solid #f87171',
+                  borderRadius: '8px',
+                  padding: '10px 16px',
+                  marginBottom: '16px',
+                  color: '#b91c1c',
+                  fontSize: '0.84rem',
+                  fontWeight: '600',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                }}>
+                  {bedroomWarning}
+                </div>
+              )}
 
               <div className="ai-results">
                 {/* Main Price Card */}
