@@ -313,17 +313,27 @@ export default function AIPricePrediction() {
     return null;
   };
 
-  /* ── Bathroom sanity check ───────────────────────────────────────────────
-     Thresholds: >4 baths in ≤5 marla | >8 baths in ≤10 marla | >12 baths in ≤1 kanal */
+  /* ── Bathroom / Washroom sanity check ───────────────────────────────────
+     Residential: >4 baths in ≤5 marla | >8 in ≤10 marla | >12 in ≤1 kanal
+     Commercial:  >2 washrooms in ≤5 marla | >4 in ≤10 marla | >6 in ≤1 kanal */
   const getBathroomWarning = () => {
     if (['plot'].includes(propType?.key)) return null;
     const AREA_C = { marla: 272.25, kanal: 5445.0, sqft: 1.0 };
     const sqft   = parseFloat(area) * (AREA_C[areaUnit] || 272.25);
     const marlas = sqft / 272.25;
     const m = Math.round(marlas * 10) / 10;
-    if (marlas <= 5  && bathrooms > 4)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
-    if (marlas <= 10 && bathrooms > 8)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
-    if (marlas <= 20 && bathrooms > 12) return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+
+    if (propType?.key === 'commercial') {
+      // Commercial — stricter limits, use "washrooms"
+      if (marlas <= 5  && bathrooms > 2) return `⚠️ ${bathrooms} washrooms in ${m} marla is not practical — model accuracy may be affected.`;
+      if (marlas <= 10 && bathrooms > 4) return `⚠️ ${bathrooms} washrooms in ${m} marla is not practical — model accuracy may be affected.`;
+      if (marlas <= 20 && bathrooms > 6) return `⚠️ ${bathrooms} washrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    } else {
+      // Residential — use "bathrooms"
+      if (marlas <= 5  && bathrooms > 4)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+      if (marlas <= 10 && bathrooms > 8)  return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+      if (marlas <= 20 && bathrooms > 12) return `⚠️ ${bathrooms} bathrooms in ${m} marla is not practical — model accuracy may be affected.`;
+    }
     return null;
   };
 
@@ -584,13 +594,13 @@ export default function AIPricePrediction() {
                 {/* Bathrooms — hide for plot */}
                 {propType?.key !== 'plot' && (
                   <div className="ai-field">
-                    <label>🚿 Bathrooms</label>
+                    <label>{propType?.key === 'commercial' ? '🚽 Washrooms' : '🚿 Bathrooms'}</label>
                     <div className="ai-count-selector">
                       <button className="ai-count-btn" onClick={() => setBathrooms(Math.max(1, bathrooms - 1))}>−</button>
                       <span className="ai-count-val">{bathrooms}</span>
                       <button className="ai-count-btn" onClick={() => setBathrooms(Math.min(10, bathrooms + 1))}>+</button>
                     </div>
-                    {/* Red live warning for bathrooms */}
+                    {/* Red live warning for bathrooms / washrooms */}
                     {bathroomWarning && (
                       <div style={{
                         fontSize: '0.75rem', color: '#b91c1c', fontWeight: '600',
