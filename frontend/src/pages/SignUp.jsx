@@ -71,13 +71,13 @@ const SignUp = () => {
                 throw new Error(data.message || "An error occurred");
             }
 
-            // Account pending approval — show success message, don't navigate
+            // Seller: pending approval — show message
             if (data.pendingApproval) {
                 setSuccess(data.message);
                 return;
             }
 
-            // Legacy: if token returned, log in directly (shouldn't happen now)
+            // Buyer: token returned — log in directly and go to home
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));

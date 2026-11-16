@@ -198,8 +198,8 @@ const Approvals = () => {
           <div className="apr-info-banner">
             <Icon name="info" size={17} color="#1d4ed8" />
             <span>
-              Verify each user's CNIC before approving. Approved users can login and access the platform.
-              Rejected users will be notified with your reason.
+              Verify each seller's CNIC before approving. Only seller accounts require admin approval — buyers are approved automatically.
+              Approved sellers can list properties on the platform. Rejected sellers will be notified with your reason.
             </span>
           </div>
 
