@@ -60,7 +60,7 @@ const categories = [
   {
     name: "Commercial",
     slug: "commercial",
-    image: "https://w0.peakpx.com/wallpaper/733/923/HD-wallpaper-architecture-design-of-commercial-buildings.jpg",
+    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=80",
   },
   {
     name: "Plots",

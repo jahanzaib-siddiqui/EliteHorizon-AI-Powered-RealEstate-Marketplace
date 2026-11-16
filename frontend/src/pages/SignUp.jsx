@@ -63,7 +63,7 @@ const SignUp = () => {
                 {/* Left Side: Green Panel */}
                 <div className="auth-panel auth-panel-side">
                     <div className="auth-overlay-content">
-                        <h2>Welcome Back!</h2>
+                        <h2 style={{ color: '#ffffff' }}>Welcome Back!</h2>
                         <p>To keep connected with us please login with your personal info</p>
                         <button className="auth-ghost-btn" onClick={() => navigate("/signin")}>
                             SIGN IN
