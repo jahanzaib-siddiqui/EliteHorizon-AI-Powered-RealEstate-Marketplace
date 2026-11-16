@@ -15,60 +15,59 @@ const isPasswordValid = (password) => {
 // Sign up
 router.post("/signup", async (req, res) => {
     try {
-        const { name, email, password, monthlyIncome, bankBalance, avatar, role } = req.body;
+        const { name, email, password, avatar, role, cnic } = req.body;
+
+        console.log("[Signup] Received:", { name, email, cnic, role }); // debug
 
         // Basic validation
-        if (!name || !email || !password) {
-            return res.status(400).json({ message: "Name, email, and password are required." });
+        if (!name || !email || !password || !cnic) {
+            return res.status(400).json({ message: "Name, email, password, and CNIC are required." });
+        }
+
+        // CNIC format validation: XXXXX-XXXXXXX-X
+        const cnicRegex = /^\d{5}-\d{7}-\d{1}$/;
+        if (!cnicRegex.test(cnic)) {
+            return res.status(400).json({ message: "CNIC must be in format XXXXX-XXXXXXX-X (e.g. 35201-1234567-8)." });
         }
 
         if (!isPasswordValid(password)) {
             return res.status(400).json({
                 message:
-                    "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.",
+                    "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (@$!%*?&).",
             });
         }
 
-        // Check if user exists
+        // Check if user exists (email or CNIC)
         const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ message: "User already exists with this email." });
+        }
+        const existingCnic = await User.findOne({ cnic });
+        if (existingCnic) {
+            return res.status(400).json({ message: "An account with this CNIC already exists." });
         }
 
         // Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create user
+        // Create user (accountStatus defaults to "pending")
         const newUser = new User({
             name,
             email,
             password: hashedPassword,
-            monthlyIncome: monthlyIncome || 0,
-            bankBalance: bankBalance || 0,
-            avatar: avatar || "/avatar_male_1_1772875227901.png", // fallback in case
+            avatar: avatar || "/avatar_male_1_1772875227901.png",
             role: role || "buyer",
+            cnic,
         });
 
         await newUser.save();
+        console.log("[Signup] User saved with CNIC:", cnic, "accountStatus: pending");
 
-        // Generate JWT
-        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET || "elite_horizon_secret_key", {
-            expiresIn: "7d",
-        });
-
+        // Do NOT issue token yet — account must be approved by admin first
         res.status(201).json({
-            message: "User created successfully",
-            token,
-            user: {
-                id: newUser._id,
-                name: newUser.name,
-                email: newUser.email,
-                monthlyIncome: newUser.monthlyIncome,
-                bankBalance: newUser.bankBalance,
-                avatar: newUser.avatar,
-                role: newUser.role,
-            },
+            message: "Account created successfully. Your account is pending admin approval. You will be able to login once approved.",
+            pendingApproval: true,
         });
     } catch (error) {
         console.error("Signup error:", error);
@@ -95,6 +94,18 @@ router.post("/signin", async (req, res) => {
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
             return res.status(400).json({ message: "Invalid credentials." });
+        }
+
+        // Block login if account not yet approved
+        if (user.accountStatus === "pending") {
+            return res.status(403).json({
+                message: "⏳ Your account is pending admin approval. You will be notified once approved.",
+            });
+        }
+        if (user.accountStatus === "rejected") {
+            return res.status(403).json({
+                message: `❌ Your account has been rejected by admin. Reason: ${user.rejectionReason || "Not specified."}`,
+            });
         }
 
         // Generate JWT

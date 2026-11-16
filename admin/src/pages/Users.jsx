@@ -88,7 +88,7 @@ const Users = () => {
           <table className="adm-table">
             <thead>
               <tr>
-                <th>#</th><th>Name</th><th>Email</th><th>Role</th><th>Joined</th><th>Action</th>
+                <th>#</th><th>Name</th><th>CNIC</th><th>Email</th><th>Role</th><th>Joined</th><th>Action</th>
               </tr>
             </thead>
             <tbody>
@@ -98,8 +98,24 @@ const Users = () => {
                   <td>
                     <div className="usr-name-cell">
                       <div className="usr-av">{u.name?.charAt(0)?.toUpperCase()}</div>
-                      <span style={{ fontWeight: 600 }}>{u.name}</span>
+                      <div>
+                        <span style={{ fontWeight: 600, display: 'block' }}>{u.name}</span>
+                      </div>
                     </div>
+                  </td>
+                  <td>
+                    {u.cnic ? (
+                      <span style={{
+                        background: '#fefce8', color: '#854d0e', border: '1px solid #fde047',
+                        borderRadius: '6px', padding: '3px 8px', fontSize: '12px',
+                        fontWeight: '600', letterSpacing: '0.5px', fontFamily: 'monospace',
+                        whiteSpace: 'nowrap'
+                      }}>
+                        🪪 {u.cnic}
+                      </span>
+                    ) : (
+                      <span style={{ color: '#d1d5db', fontSize: '12px' }}>—</span>
+                    )}
                   </td>
                   <td style={{ color: '#6b7280' }}>{u.email}</td>
                   <td><span className={`adm-badge ${u.role === 'seller' ? 'badge-green' : 'badge-blue'}`}>{u.role}</span></td>
@@ -113,7 +129,7 @@ const Users = () => {
                 </tr>
               ))}
               {users.length === 0 && (
-                <tr><td colSpan={6} style={{ textAlign: 'center', padding: 32, color: '#9ca3af' }}>No users found</td></tr>
+                <tr><td colSpan={7} style={{ textAlign: 'center', padding: 32, color: '#9ca3af' }}>No users found</td></tr>
               )}
             </tbody>
           </table>

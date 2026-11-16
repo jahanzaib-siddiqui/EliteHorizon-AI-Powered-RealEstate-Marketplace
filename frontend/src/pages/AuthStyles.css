@@ -23,11 +23,11 @@
     max-width: 100%;
     min-height: 480px;
     display: flex;
+    align-items: stretch;
 }
 
 .auth-panel {
     width: 50%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -37,17 +37,12 @@
     box-sizing: border-box;
 }
 
-/* Updated to Green Theme with Half-Height Structure from Image */
+/* Green panel fills the full height of the auth box */
 .auth-overlay-content {
     background: linear-gradient(to right, #28a745, #1e7e34);
-    /* Green theme */
     color: #ffffff;
     width: 100%;
-
-    /* Make the green box take up only a portion of the panel, aligned to the top */
-    height: 50%;
-    /* Adjusted height to look liket the images */
-    min-height: 500px;
+    height: 100%;
 
     display: flex;
     flex-direction: column;
@@ -56,16 +51,13 @@
     padding: 0 40px;
     box-sizing: border-box;
     text-align: center;
-
-    /* Slight rounding on the edges if desired, but sticking to crisp lines as depicted */
 }
 
-/* Added specific alignments for the panel wrapping the overlay */
+/* Panel side: flush, no padding, fill full height */
 .auth-panel-side {
-    justify-content: flex-start;
-    /* Align content to the top so the green hits the top border */
+    justify-content: center;
+    align-items: stretch;
     padding: 0;
-    /* Remove horizontal padding so the background is flush with borders */
 }
 
 /* Forms */

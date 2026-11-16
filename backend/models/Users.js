@@ -35,6 +35,23 @@ const userSchema = new mongoose.Schema(
             enum: ["buyer", "seller"],
             default: "buyer",
         },
+        cnic: {
+            type: String,
+            required: false,   // enforced in route, not model (allows old users without CNIC)
+            unique: true,
+            sparse: true,      // allows multiple null values with unique index
+            trim: true,
+            match: [/^\d{5}-\d{7}-\d{1}$/, "CNIC must be in format XXXXX-XXXXXXX-X"],
+        },
+        accountStatus: {
+            type: String,
+            enum: ["pending", "approved", "rejected"],
+            default: "pending",
+        },
+        rejectionReason: {
+            type: String,
+            default: "",
+        },
     },
     {
         timestamps: true,

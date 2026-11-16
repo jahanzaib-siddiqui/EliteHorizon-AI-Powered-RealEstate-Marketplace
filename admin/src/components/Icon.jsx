@@ -226,6 +226,12 @@ const Icon = ({ name, size = 18, color = 'currentColor', strokeWidth = 1.75 }) =
         <line x1="21" y1="16" x2="24" y2="16"/>
       </svg>
     ),
+    bell: (
+      <svg style={s} viewBox="0 0 24 24" {...p}>
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+      </svg>
+    ),
   };
 
   return paths[name] || null;
