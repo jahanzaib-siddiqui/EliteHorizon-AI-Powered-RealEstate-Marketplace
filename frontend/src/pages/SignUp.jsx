@@ -71,18 +71,17 @@ const SignUp = () => {
                 throw new Error(data.message || "An error occurred");
             }
 
-            // Seller: pending approval — show message
-            if (data.pendingApproval) {
-                setSuccess(data.message);
-                return;
-            }
-
-            // Buyer: token returned — log in directly and go to home
+            // All users get token immediately — login directly
             if (data.token) {
                 localStorage.setItem("token", data.token);
                 localStorage.setItem("user", JSON.stringify(data.user));
                 navigate("/");
                 window.location.reload();
+            }
+
+            // Fallback success message (shouldn't reach here)
+            if (data.message) {
+                setSuccess(data.message);
             }
         } catch (err) {
             setError(err.message);
@@ -168,29 +167,7 @@ const SignUp = () => {
                                 </div>
                             </div>
 
-                            {error   && <div className="auth-error">⚠ {error}</div>}
-                            {success && (
-                                <div style={{
-                                    background: "#f0fdf4", border: "1px solid #22c55e", borderRadius: "8px",
-                                    padding: "12px 14px", fontSize: "13px", color: "#15803d",
-                                    textAlign: "center", marginTop: "8px", lineHeight: "1.5"
-                                }}>
-                                    ✅ {success}
-                                    <div style={{ marginTop: "8px" }}>
-                                        <button
-                                            type="button"
-                                            onClick={() => navigate("/signin")}
-                                            style={{
-                                                background: "#16a34a", color: "#fff", border: "none",
-                                                borderRadius: "6px", padding: "6px 18px", cursor: "pointer",
-                                                fontSize: "12px", fontWeight: "600"
-                                            }}
-                                        >
-                                            Go to Sign In
-                                        </button>
-                                    </div>
-                                </div>
-                            )}
+                            {error && <div className="auth-error">⚠ {error}</div>}
 
                             <div className="role-selection">
                                 <label>Account Type:</label>

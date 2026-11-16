@@ -17,8 +17,6 @@ router.post("/signup", async (req, res) => {
     try {
         const { name, email, password, avatar, role, cnic } = req.body;
 
-        console.log("[Signup] Received:", { name, email, cnic, role }); // debug
-
         // Basic validation
         if (!name || !email || !password || !cnic) {
             return res.status(400).json({ message: "Name, email, password, and CNIC are required." });
@@ -32,8 +30,7 @@ router.post("/signup", async (req, res) => {
 
         if (!isPasswordValid(password)) {
             return res.status(400).json({
-                message:
-                    "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (@$!%*?&).",
+                message: "Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character (@$!%*?&).",
             });
         }
 
@@ -51,9 +48,7 @@ router.post("/signup", async (req, res) => {
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // Create user
-        // Buyers are auto-approved; Sellers require admin approval
-        const isSeller = (role || "buyer") === "seller";
+        // All users are auto-approved — no admin approval required
         const newUser = new User({
             name,
             email,
@@ -61,21 +56,12 @@ router.post("/signup", async (req, res) => {
             avatar: avatar || "/avatar_male_1_1772875227901.png",
             role: role || "buyer",
             cnic,
-            accountStatus: isSeller ? "pending" : "approved",
+            accountStatus: "approved",
         });
 
         await newUser.save();
-        console.log("[Signup] Saved:", name, "| role:", role, "| accountStatus:", newUser.accountStatus);
 
-        if (isSeller) {
-            // Seller must wait for admin approval
-            return res.status(201).json({
-                message: "Seller account created. Your account is pending admin approval. You will be able to login once approved.",
-                pendingApproval: true,
-            });
-        }
-
-        // Buyer — issue JWT immediately so they can login
+        // Issue JWT immediately so user can login right away
         const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET || "elite_horizon_secret_key", { expiresIn: "7d" });
         res.status(201).json({
             message: "Account created successfully!",
@@ -115,20 +101,8 @@ router.post("/signin", async (req, res) => {
             return res.status(400).json({ message: "Invalid credentials." });
         }
 
-        // Block login if seller account not yet approved
-        // Buyers are always allowed (auto-approved at signup from now on)
-        if (user.accountStatus === "pending" && user.role === "seller") {
-            return res.status(403).json({
-                message: "⏳ Your seller account is pending admin approval. You will be notified once approved.",
-            });
-        }
-        if (user.accountStatus === "rejected") {
-            return res.status(403).json({
-                message: `❌ Your account has been rejected by admin. Reason: ${user.rejectionReason || "Not specified."}`,
-            });
-        }
-        // Auto-fix: if buyer has pending status (created with old code), approve on first login
-        if (user.accountStatus === "pending" && user.role === "buyer") {
+        // Auto-fix any old pending accounts — allow them to login
+        if (user.accountStatus === "pending") {
             user.accountStatus = "approved";
             await user.save();
         }
