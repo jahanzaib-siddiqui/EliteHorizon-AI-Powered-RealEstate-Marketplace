@@ -95,15 +95,60 @@ router.get("/users", adminAuth, async (req, res) => {
         const page   = parseInt(req.query.page)  || 1;
         const limit  = parseInt(req.query.limit) || 15;
         const search = req.query.search || "";
-        const filter = search
-            ? { $or: [{ name: new RegExp(search, "i") }, { email: new RegExp(search, "i") }] }
-            : {};
+        const status = req.query.status || "";           // filter by accountStatus
+        const filter = {};
+        if (search) {
+            filter.$or = [
+                { name: new RegExp(search, "i") },
+                { email: new RegExp(search, "i") },
+                { cnic: new RegExp(search, "i") },
+            ];
+        }
+        if (status) filter.accountStatus = status;
+
         const [users, total] = await Promise.all([
             User.find(filter).select("-password").sort({ createdAt: -1 }).skip((page-1)*limit).limit(limit),
             User.countDocuments(filter)
         ]);
         res.json({ users, total, pages: Math.ceil(total / limit) });
     } catch { res.status(500).json({ message: "Error fetching users." }); }
+});
+
+// ── GET /api/admin/users/pending ── users awaiting approval
+router.get("/users/pending", adminAuth, async (req, res) => {
+    try {
+        const users = await User.find({ accountStatus: "pending" })
+            .select("-password")
+            .sort({ createdAt: -1 });
+        res.json({ users, total: users.length });
+    } catch { res.status(500).json({ message: "Error fetching pending users." }); }
+});
+
+// ── POST /api/admin/users/:id/approve ── approve a user account
+router.post("/users/:id/approve", adminAuth, async (req, res) => {
+    try {
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { accountStatus: "approved", rejectionReason: "" },
+            { new: true }
+        ).select("-password");
+        if (!user) return res.status(404).json({ message: "User not found." });
+        res.json({ message: `Account approved for ${user.name}.`, user });
+    } catch { res.status(500).json({ message: "Error approving user." }); }
+});
+
+// ── POST /api/admin/users/:id/reject ── reject a user account
+router.post("/users/:id/reject", adminAuth, async (req, res) => {
+    try {
+        const { reason } = req.body;
+        const user = await User.findByIdAndUpdate(
+            req.params.id,
+            { accountStatus: "rejected", rejectionReason: reason || "Not specified." },
+            { new: true }
+        ).select("-password");
+        if (!user) return res.status(404).json({ message: "User not found." });
+        res.json({ message: `Account rejected for ${user.name}.`, user });
+    } catch { res.status(500).json({ message: "Error rejecting user." }); }
 });
 
 // ── DELETE /api/admin/users/:id ──
@@ -243,6 +288,13 @@ const TRAIN_SCRIPT   = path.join(AI_MODELS_DIR, 'train.py');
 const MODELS_DIR     = path.join(AI_MODELS_DIR, 'models');
 const META_FILE      = path.join(MODELS_DIR, 'all_models_meta.json');
 
+// Use conda python3 (has ML libs); fallback to /usr/local/bin/python3
+const PYTHON_BIN = existsSync('/opt/anaconda3/bin/python3')
+  ? '/opt/anaconda3/bin/python3'
+  : existsSync('/usr/local/bin/python3')
+  ? '/usr/local/bin/python3'
+  : 'python3';
+
 // In-memory training state
 const trainingState = {
   status:    'idle',   // 'idle' | 'running' | 'done' | 'error'
@@ -317,9 +369,13 @@ router.post('/train/start', adminAuth, (req, res) => {
   trainingState.finishedAt = null;
   trainingState.logs      = [`[${new Date().toLocaleTimeString()}] 🚀 Training started...\n`];
 
-  const proc = spawn('python3', [TRAIN_SCRIPT], {
+  const proc = spawn(PYTHON_BIN, [TRAIN_SCRIPT], {
     cwd: AI_MODELS_DIR,
-    env: { ...process.env, PYTHONUNBUFFERED: '1' },
+    env: {
+      ...process.env,
+      PYTHONUNBUFFERED: '1',
+      PATH: `/opt/anaconda3/bin:/opt/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:${process.env.PATH || ''}`,
+    },
   });
   trainingState.process = proc;
 
@@ -372,7 +428,8 @@ router.post('/train/stop', adminAuth, (req, res) => {
 // ── POST /api/admin/train/reload ─────────────────────────────────────────────
 // Restarts the Flask predict API so new .pkl models are loaded
 router.post('/train/reload', adminAuth, (req, res) => {
-  exec('pkill -f predict_api.py; sleep 1; cd ' + AI_MODELS_DIR + ' && nohup python3 predict_api.py > /tmp/predict_api.log 2>&1 &',
+  const reloadCmd = `pkill -f predict_api.py; sleep 1; cd "${AI_MODELS_DIR}" && nohup "${PYTHON_BIN}" predict_api.py > /tmp/predict_api.log 2>&1 &`;
+  exec(reloadCmd,
     (err) => {
       if (err) {
         return res.json({ message: 'Reload attempted. Check if predict_api.py is running manually.', warning: err.message });
