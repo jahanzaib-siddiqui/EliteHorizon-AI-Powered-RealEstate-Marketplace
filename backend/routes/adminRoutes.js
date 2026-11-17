@@ -5,6 +5,7 @@ import SellerProperty from "../models/SellerProperty.js";
 import Property from "../models/Property.js";
 import Conversation from "../models/Conversation.js";
 import Message from "../models/Message.js";
+import TrainingLog from "../models/TrainingLog.js";
 import { spawn, exec } from 'child_process';
 import { existsSync, statSync, readdirSync, readFileSync } from 'fs';
 import path from 'path';
@@ -356,10 +357,40 @@ router.get('/train/logs', adminAuth, (req, res) => {
   res.json({ logs: trainingState.logs });
 });
 
+// ── GET /api/admin/train/last-results ──────────────────────────────────────
+// Returns the most recent saved training log from MongoDB (for Vercel use)
+router.get('/train/last-results', adminAuth, async (req, res) => {
+  try {
+    const doc = await TrainingLog.findOne().sort({ createdAt: -1 });
+    if (!doc) return res.json({ logs: [], status: 'none', startedAt: null, finishedAt: null });
+    res.json({ logs: doc.logs, status: doc.status, startedAt: doc.startedAt, finishedAt: doc.finishedAt });
+  } catch (err) {
+    res.status(500).json({ message: 'Error fetching last training log.', error: err.message });
+  }
+});
+
 // ── POST /api/admin/train/start ──────────────────────────────────────────────
-router.post('/train/start', adminAuth, (req, res) => {
+router.post('/train/start', adminAuth, async (req, res) => {
   if (trainingState.status === 'running') {
     return res.status(409).json({ message: 'Training is already in progress.' });
+  }
+
+  // Vercel/serverless environments cannot spawn child processes — return last saved results
+  const isServerless = process.env.VERCEL || process.env.AWS_LAMBDA_FUNCTION_NAME || !existsSync(PYTHON_BIN);
+  if (isServerless) {
+    try {
+      const doc = await TrainingLog.findOne().sort({ createdAt: -1 });
+      if (doc) {
+        return res.status(503).json({
+          message: 'cloud',
+          lastLogs: doc.logs,
+          lastStatus: doc.status,
+          lastStartedAt: doc.startedAt,
+          lastFinishedAt: doc.finishedAt,
+        });
+      }
+    } catch (_) {}
+    return res.status(503).json({ message: 'cloud', lastLogs: [], lastStatus: 'none' });
   }
 
   if (!existsSync(TRAIN_SCRIPT)) {
@@ -401,7 +432,7 @@ router.post('/train/start', adminAuth, (req, res) => {
   proc.stdout.on('data', appendLog);
   proc.stderr.on('data', appendLog);
 
-  proc.on('close', (code) => {
+  proc.on('close', async (code) => {
     trainingState.status    = code === 0 ? 'done' : 'error';
     trainingState.finishedAt = new Date();
     trainingState.process   = null;
@@ -410,6 +441,19 @@ router.post('/train/start', adminAuth, (req, res) => {
       : `[${new Date().toLocaleTimeString()}] ❌ Training failed with exit code ${code}`;
     trainingState.logs.push(msg);
     console.log(msg);
+
+    // ── Save training log to MongoDB so Vercel can fetch it ──────────────────
+    try {
+      await TrainingLog.create({
+        logs:       trainingState.logs,
+        status:     trainingState.status,
+        startedAt:  trainingState.startedAt,
+        finishedAt: trainingState.finishedAt,
+      });
+      console.log('[Admin] Training log saved to MongoDB.');
+    } catch (e) {
+      console.error('[Admin] Failed to save training log:', e.message);
+    }
   });
 
   proc.on('error', (err) => {

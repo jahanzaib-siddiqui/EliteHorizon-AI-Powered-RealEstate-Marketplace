@@ -88,6 +88,28 @@ export default function TrainingPanel() {
     setTimeout(() => setToast(null), 3500);
   };
 
+  // ── Load last training results from MongoDB (for Vercel/cloud) ──────────────
+  const loadLastResults = async () => {
+    try {
+      const res  = await fetch(`${API}/last-results`, { headers: { Authorization: `Bearer ${token()}` } });
+      const data = await res.json();
+      if (data.logs?.length) {
+        setLogs(data.logs);
+        setStatus(s => ({
+          ...s,
+          status:     data.status || 'done',
+          startedAt:  data.startedAt,
+          finishedAt: data.finishedAt,
+        }));
+        showToast('Showing last local training results from database.', 'success');
+      } else {
+        showToast('No previous training results found. Run training locally first.', 'warning');
+      }
+    } catch {
+      showToast('Could not load last results.', 'error');
+    }
+  };
+
   // ── Start training ───────────────────────────────────────────────────────────
   const handleStart = async () => {
     if (loading) return;
@@ -101,11 +123,25 @@ export default function TrainingPanel() {
       if (res.ok) {
         showToast('Training started! Logs will stream below.', 'success');
         setStatus(s => ({ ...s, status: 'running' }));
+      } else if (res.status === 503 && data.message === 'cloud') {
+        // Vercel environment — display last saved results from MongoDB
+        if (data.lastLogs?.length) {
+          setLogs(data.lastLogs);
+          setStatus(s => ({
+            ...s,
+            status:     data.lastStatus || 'done',
+            startedAt:  data.lastStartedAt,
+            finishedAt: data.lastFinishedAt,
+          }));
+          showToast('Cloud mode — showing last local training results.', 'success');
+        } else {
+          showToast('No saved results yet. Run training locally first: /opt/anaconda3/bin/python3 train.py', 'warning');
+        }
       } else {
         showToast(data.message || 'Failed to start training.', 'error');
       }
     } catch {
-      showToast('Network error.', 'error');
+      showToast('Network error — is the local backend running?', 'error');
     } finally {
       setLoading(false);
     }
@@ -152,6 +188,33 @@ export default function TrainingPanel() {
         <p className="adm-page-sub">Retrain XGBoost &amp; Random Forest models from the latest dataset</p>
       </div>
 
+      {/* Cloud limitation notice */}
+      <div style={{
+        background: '#fefce8', border: '1px solid #fde047', borderRadius: '10px',
+        padding: '12px 16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px',
+        justifyContent: 'space-between', flexWrap: 'wrap',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+          <Icon name="alertTriangle" size={17} color="#ca8a04" />
+          <div style={{ fontSize: '13px', color: '#854d0e', lineHeight: '1.5' }}>
+            <strong>Training runs locally only.</strong> Vercel (cloud) cannot spawn Python processes.
+            <br />To retrain: open Terminal → <code style={{ background: '#fef9c3', padding: '1px 5px', borderRadius: '4px' }}>
+              cd ai-models &amp;&amp; /opt/anaconda3/bin/python3 train.py
+            </code>
+          </div>
+        </div>
+        <button
+          onClick={loadLastResults}
+          style={{
+            background: '#854d0e', color: '#fff', border: 'none', borderRadius: '7px',
+            padding: '7px 14px', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
+            whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px',
+          }}
+        >
+          <Icon name="refresh" size={13} color="#fff" /> Load Last Results
+        </button>
+      </div>
+
       {/* Status Banner */}
       <div className={`tp-banner tp-banner-${status.status}`}>
         <div className="tp-banner-left">
@@ -194,6 +257,7 @@ export default function TrainingPanel() {
           <div className="tp-card-header">
             <span className="tp-card-title">Live Training Log</span>
             {isRunning && <span className="tp-live-badge">● LIVE</span>}
+            {!isRunning && logs.length > 0 && <span style={{ fontSize: '11px', color: '#6b7280' }}>Stored results</span>}
           </div>
           <div className="tp-terminal" ref={logRef}>
             {logs.length === 0 ? (
