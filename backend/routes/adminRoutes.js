@@ -295,6 +295,9 @@ const PYTHON_BIN = existsSync('/opt/anaconda3/bin/python3')
   ? '/usr/local/bin/python3'
   : 'python3';
 
+console.log('[Admin] Python binary resolved to:', PYTHON_BIN);
+console.log('[Admin] Train script path:', TRAIN_SCRIPT);
+
 // In-memory training state
 const trainingState = {
   status:    'idle',   // 'idle' | 'running' | 'done' | 'error'
@@ -367,15 +370,20 @@ router.post('/train/start', adminAuth, (req, res) => {
   trainingState.status    = 'running';
   trainingState.startedAt = new Date();
   trainingState.finishedAt = null;
-  trainingState.logs      = [`[${new Date().toLocaleTimeString()}] 🚀 Training started...\n`];
+  trainingState.logs      = [`[${new Date().toLocaleTimeString()}] 🚀 Training started...`];
 
+  const shellEnv = {
+    ...process.env,
+    PYTHONUNBUFFERED: '1',
+    PATH: `/opt/anaconda3/bin:/opt/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:${process.env.PATH || ''}`,
+  };
+
+  trainingState.logs.push(`[${new Date().toLocaleTimeString()}] Python: ${PYTHON_BIN}`);
+
+  // Spawn directly with full Python binary path
   const proc = spawn(PYTHON_BIN, [TRAIN_SCRIPT], {
     cwd: AI_MODELS_DIR,
-    env: {
-      ...process.env,
-      PYTHONUNBUFFERED: '1',
-      PATH: `/opt/anaconda3/bin:/opt/anaconda3/condabin:/usr/local/bin:/usr/bin:/bin:${process.env.PATH || ''}`,
-    },
+    env: shellEnv,
   });
   trainingState.process = proc;
 
