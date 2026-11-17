@@ -232,6 +232,35 @@ const Icon = ({ name, size = 18, color = 'currentColor', strokeWidth = 1.75 }) =
         <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
       </svg>
     ),
+    eye: (
+      <svg style={s} viewBox="0 0 24 24" {...p}>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+        <circle cx="12" cy="12" r="3"/>
+      </svg>
+    ),
+    eyeOff: (
+      <svg style={s} viewBox="0 0 24 24" {...p}>
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+        <line x1="1" y1="1" x2="23" y2="23"/>
+      </svg>
+    ),
+    refresh: (
+      <svg style={s} viewBox="0 0 24 24" {...p}>
+        <polyline points="23 4 23 10 17 10"/>
+        <polyline points="1 20 1 14 7 14"/>
+        <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+      </svg>
+    ),
+    play: (
+      <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none">
+        <polygon points="5 3 19 12 5 21 5 3"/>
+      </svg>
+    ),
+    square: (
+      <svg style={s} viewBox="0 0 24 24" fill={color} stroke="none">
+        <rect x="3" y="3" width="18" height="18" rx="2"/>
+      </svg>
+    ),
   };
 
   return paths[name] || null;

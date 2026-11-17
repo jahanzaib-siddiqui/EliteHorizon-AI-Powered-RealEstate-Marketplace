@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Icon from '../components/Icon';
 import './AdminLogin.css';
 
 const AdminLogin = () => {
@@ -54,7 +55,7 @@ const AdminLogin = () => {
       <div className="al-right">
         <div className="al-card">
           <div className="al-card-header">
-            <div className="al-shield">🛡️</div>
+            <div className="al-shield"><Icon name="shield" size={28} color="#16a34a" /></div>
             <h2>Admin Sign In</h2>
             <p>Restricted access — authorised personnel only</p>
           </div>
@@ -83,12 +84,12 @@ const AdminLogin = () => {
                   autoComplete="current-password"
                 />
                 <button type="button" className="al-eye" onClick={() => setShowPw(s => !s)}>
-                  {showPw ? '🙈' : '👁️'}
+                  <Icon name={showPw ? 'eyeOff' : 'eye'} size={17} color="#9ca3af" />
                 </button>
               </div>
             </div>
 
-            {error && <div className="al-error">⚠️ {error}</div>}
+            {error && <div className="al-error"><Icon name="alertTriangle" size={14} color="#dc2626" /> {error}</div>}
 
             <button type="submit" className="al-btn" disabled={loading}>
               {loading ? <span className="al-spinner"></span> : 'Sign In to Dashboard'}

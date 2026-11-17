@@ -3,7 +3,7 @@ import Icon from '../components/Icon';
 import './TrainingPanel.css';
 
 const token = () => localStorage.getItem('adminToken');
-const API   = '/api/admin/train';
+const API   = `${import.meta.env.VITE_API_URL}/api/admin/train`;
 
 const MODEL_LABELS = {
   homes_buy:        { label: 'Homes — Buy',        color: 'green'  },
@@ -171,11 +171,11 @@ export default function TrainingPanel() {
         <div className="tp-banner-actions">
           {!isRunning ? (
             <button className="tp-btn tp-btn-primary" onClick={handleStart} disabled={loading}>
-              {loading ? 'Starting…' : '▶ Start Training'}
+              {loading ? 'Starting…' : <><Icon name="play" size={14} color="white" /> Start Training</>}
             </button>
           ) : (
             <button className="tp-btn tp-btn-danger" onClick={handleStop}>
-              ■ Stop Training
+              <Icon name="square" size={14} color="white" /> Stop Training
             </button>
           )}
           <button
@@ -183,7 +183,7 @@ export default function TrainingPanel() {
             onClick={handleReload}
             disabled={reloading}
           >
-            {reloading ? 'Reloading…' : '🔄 Reload AI Models'}
+            {reloading ? 'Reloading…' : <><Icon name="refresh" size={14} color="currentColor" /> Reload AI Models</>}
           </button>
         </div>
       </div>
