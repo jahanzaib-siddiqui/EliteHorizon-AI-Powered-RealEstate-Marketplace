@@ -36,8 +36,10 @@ export default function TrainingPanel() {
   const [loading,   setLoading]   = useState(false);
   const [reloading, setReloading] = useState(false);
   const [toast,     setToast]     = useState(null);
-  const logRef = useRef(null);
-  const pollRef = useRef(null);
+  const logRef      = useRef(null);
+  const pollRef     = useRef(null);
+  // When true we're showing MongoDB-stored results — skip live /train/logs polling
+  const cloudMode   = useRef(false);
 
   // ── Fetch status ────────────────────────────────────────────────────────────
   const fetchStatus = async () => {
@@ -48,8 +50,9 @@ export default function TrainingPanel() {
     } catch (_) {}
   };
 
-  // ── Fetch logs ───────────────────────────────────────────────────────────────
+  // ── Fetch live logs (in-memory) — skipped when showing cloud/DB results ─────
   const fetchLogs = async () => {
+    if (cloudMode.current) return;          // ← don't overwrite cloud results
     try {
       const res  = await fetch(`${API}/logs`, { headers: { Authorization: `Bearer ${token()}` } });
       const data = await res.json();
@@ -64,12 +67,10 @@ export default function TrainingPanel() {
     }
   }, [logs]);
 
-  // ── Poll while training ──────────────────────────────────────────────────────
+  // ── Poll while training is running ───────────────────────────────────────────
   useEffect(() => {
-    fetchStatus();
-    fetchLogs();
-
     if (status.status === 'running') {
+      cloudMode.current = false;            // live training — enable polling
       pollRef.current = setInterval(() => {
         fetchStatus();
         fetchLogs();
@@ -94,6 +95,7 @@ export default function TrainingPanel() {
       const res  = await fetch(`${API}/last-results`, { headers: { Authorization: `Bearer ${token()}` } });
       const data = await res.json();
       if (data.logs?.length) {
+        cloudMode.current = true;           // ← lock polling so results stay visible
         setLogs(data.logs);
         setStatus(s => ({
           ...s,
@@ -121,11 +123,13 @@ export default function TrainingPanel() {
       });
       const data = await res.json();
       if (res.ok) {
+        cloudMode.current = false;          // ← live training — allow polling
         showToast('Training started! Logs will stream below.', 'success');
         setStatus(s => ({ ...s, status: 'running' }));
       } else if (res.status === 503 && data.message === 'cloud') {
         // Vercel environment — display last saved results from MongoDB
         if (data.lastLogs?.length) {
+          cloudMode.current = true;         // ← lock polling so results stay visible
           setLogs(data.lastLogs);
           setStatus(s => ({
             ...s,
@@ -133,7 +137,7 @@ export default function TrainingPanel() {
             startedAt:  data.lastStartedAt,
             finishedAt: data.lastFinishedAt,
           }));
-          showToast('Cloud mode — showing last local training results.', 'success');
+          showToast('Showing last local training results.', 'success');
         } else {
           showToast('No saved results yet. Run training locally first: /opt/anaconda3/bin/python3 train.py', 'warning');
         }
@@ -186,33 +190,6 @@ export default function TrainingPanel() {
       <div className="adm-page-header">
         <h1 className="adm-page-title">AI Model Training</h1>
         <p className="adm-page-sub">Retrain XGBoost &amp; Random Forest models from the latest dataset</p>
-      </div>
-
-      {/* Cloud limitation notice */}
-      <div style={{
-        background: '#fefce8', border: '1px solid #fde047', borderRadius: '10px',
-        padding: '12px 16px', marginBottom: '16px', display: 'flex', alignItems: 'center', gap: '10px',
-        justifyContent: 'space-between', flexWrap: 'wrap',
-      }}>
-        <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
-          <Icon name="alertTriangle" size={17} color="#ca8a04" />
-          <div style={{ fontSize: '13px', color: '#854d0e', lineHeight: '1.5' }}>
-            <strong>Training runs locally only.</strong> Vercel (cloud) cannot spawn Python processes.
-            <br />To retrain: open Terminal → <code style={{ background: '#fef9c3', padding: '1px 5px', borderRadius: '4px' }}>
-              cd ai-models &amp;&amp; /opt/anaconda3/bin/python3 train.py
-            </code>
-          </div>
-        </div>
-        <button
-          onClick={loadLastResults}
-          style={{
-            background: '#854d0e', color: '#fff', border: 'none', borderRadius: '7px',
-            padding: '7px 14px', fontSize: '12px', fontWeight: 600, cursor: 'pointer',
-            whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px',
-          }}
-        >
-          <Icon name="refresh" size={13} color="#fff" /> Load Last Results
-        </button>
       </div>
 
       {/* Status Banner */}
